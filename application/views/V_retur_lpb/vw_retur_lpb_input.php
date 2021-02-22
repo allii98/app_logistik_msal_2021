@@ -1,0 +1,876 @@
+<style type="text/css">
+	#tbodyPemesan tr:hover {
+        background-color: #26b99a;
+        color: #ffffff;
+    }
+
+    @media (min-width: 768px) {
+	  .modal-xl {
+	    width: 90%;
+	   max-width:1200px;
+	  }
+	}
+	.modal {
+	  overflow-y:auto;
+	}
+</style>
+
+<?php 
+	$lokasi_sesi = $this->session->userdata('status_lokasi');
+?>
+
+<div class="">
+	<div class="clearfix"></div>
+	<div class="row">
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<div class="x_panel">
+				<div class="x_title">
+					<h2>Retur LPB <small>Retur Laporan Penerimaan Barang</small></h2>
+					<div class="clearfix"></div>
+				</div>
+				<div class="x_content">
+					<br />
+					<a href="<?php echo site_url('retur_lpb/input'); ?>" class="btn btn-sm btn-info" id="a_lpb_baru"><span class="fa fa-plus"></span> LPB Baru</a>
+					<div id="" data-parsley-validate class="form-horizontal form-label-left">
+						<div class="form-group div_form_1">
+							<div class="col-md-12">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label class="control-label col-md-4 col-sm-3 col-xs-12">No Retur <span class="required">*</span>
+											</label>
+											<label class="col-md-4 col-sm-6 col-xs-12">-</label>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-4 col-sm-3 col-xs-12">Tgl Retur <span class="required">*</span>
+											</label>
+											<div class="col-md-4 col-sm-6 col-xs-12">
+												<input id="txt_tgl_retur" name="txt_tgl_retur" class="form-control col-md-2 col-xs-12" required="required" type="text" placeholder="Tgl. Retur" readonly>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-4 col-sm-3 col-xs-12">No. LPB <span class="required">*</span>
+											</label>
+											<div class="col-md-3 col-sm-6 col-xs-12">
+												<input id="txt_no_lpb" name="txt_no_lpb" class="form-control col-md-2 col-xs-12" required="required" type="text" onkeypress="getEventLPB(event,this.value)" placeholder="No. LPB">
+											</div>
+											<div class="col-md-5 col-sm-6 col-xs-12">
+												<input id="txt_ref_lpb" name="txt_ref_lpb" class="form-control col-md-2 col-xs-12" required="required" type="text" placeholder="No. Ref. LPB" readonly>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-4 col-sm-3 col-xs-12">Tgl LPB <span class="required">*</span>
+											</label>
+											<div class="col-md-4 col-sm-6 col-xs-12">
+												<input id="txt_tgl_lpb" name="txt_tgl_lpb" class="form-control col-md-2 col-xs-12" required="required" type="text" placeholder="Tgl. LPB" readonly>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-4 col-sm-3 col-xs-12">No. Pengantar <span class="required">*</span>
+											</label>
+											<div class="col-md-6 col-sm-6 col-xs-12">
+												<input id="txt_no_pengantar" name="txt_no_pengantar" class="form-control col-md-2 col-xs-12" required="required" type="text" placeholder="No. Pengantar" readonly>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label class="control-label col-md-3 col-sm-3 col-xs-12">No. PO <span class="required">*</span>
+											</label>
+											<div class="col-md-3 col-sm-6 col-xs-12">
+												<input id="txt_no_po" name="txt_no_po" class="form-control col-md-2 col-xs-12" required="required" type="text" onfocus="pilihModalDataPO()" placeholder="No. PO" readonly>
+											</div>
+											<div class="col-md-6 col-sm-6 col-xs-12">
+												<input id="txt_ref_po" name="txt_ref_po" class="form-control col-md-2 col-xs-12" required="required" type="text" onfocus="pilihModalDataPO()" placeholder="No. PO" readonly>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-3 col-sm-3 col-xs-12">Supplier <span class="required">*</span>
+											</label>
+											<div class="col-md-2 col-sm-6 col-xs-12">
+												<input id="txt_kd_supplier" name="txt_kd_supplier" class="form-control col-md-2 col-xs-12" required="required" type="text" placeholder="Kode Supplier" readonly>
+											</div>
+											<div class="col-md-4 col-sm-6 col-xs-12">
+												<input id="txt_supplier" name="txt_supplier" class="form-control col-md-2 col-xs-12" required="required" type="text" placeholder="Supplier" readonly>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-3 col-sm-3 col-xs-12">Lokasi Gudang <span class="required">*</span>
+											</label>
+											<div class="col-md-6 col-sm-6 col-xs-12">
+												<input id="txt_lokasi_gudang" name="txt_lokasi_gudang" class="form-control col-md-2 col-xs-12" required="required" type="text" placeholder="Lokasi Gudang" readonly>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-3 col-sm-3 col-xs-12">Tgl. PO <span class="required">*</span>
+											</label>
+											<div class="col-md-4 col-sm-6 col-xs-12">
+												<input id="txt_tgl_po" name="txt_tgl_po" class="form-control col-md-2 col-xs-12" required="required" type="text" placeholder="Tgl. PO" readonly>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="control-label col-md-3 col-sm-3 col-xs-12">Ket <span class="required">*</span>
+											</label>
+											<div class="col-md-6 col-sm-6 col-xs-12">
+												<textarea class="resizable_textarea form-control" id="txt_ket_pengiriman" name="txt_ket_pengiriman" placeholder="Keterangan Pengiriman" readonly></textarea>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="x_content div_form_2">
+					<input type="hidden" id="hidden_kode_pt" name="hidden_kode_pt">
+					<input type="hidden" id="hidden_nama_pt" name="hidden_nama_pt">
+					<input type="hidden" id="hidden_acc_hutang_usaha" name="hidden_acc_hutang_usaha">
+					<label id="lbl_nama_pt" name="lbl_nama_pt">PT : ...</label><br>
+					<div class="table-responsive">
+						<table class="table table-striped table-bordered" id="tableRinciLPB" width="100%">
+							<thead>
+								<tr>
+									<th></th>
+									<th width="20%">Kd. Barang</th>
+									<th>Nama Barang</th>
+									<th width="10%">Qty</th>
+									<th width="10%">Satuan</th>
+									<th width="30%">Ket</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody id="tbody_rincian" name="tbody_rincian">
+								<tr id="tr_1">
+									<td>
+										<input type="hidden" id="hidden_proses_status_1" name="hidden_proses_status_1" value="insert">
+										<button class="btn btn-xs btn-info fa fa-plus" data-toggle="tooltip" data-placement="left" title="Tambah" id="btn_tambah_row" name="btn_tambah_row" onclick="tambah_row('1')"></button><br />
+										<button class="btn btn-xs btn-danger fa fa-minus btn_hapus_row" type="button" data-toggle="tooltip" data-placement="left" title="Hapus" id="btn_hapus_row" name="btn_hapus_row" onclick="hapus_row('1')"></button>
+									</td>
+									<form id="form_rinci_1" name="form_rinci_1" method="POST" action="javascript:;">
+										<td>
+											<input type="text" class="form-control" id="txt_kode_barang_1" name="txt_kode_barang_1" placeholder="Kode Barang" onfocus="pilihModalBarang('1')" readonly>
+											<label>
+					                            <input type="checkbox" id="chk_asset_1" name="chk_asset_1" value=""> Asset ?
+					                        </label>
+										</td>
+										<td>
+											<input type="text" class="form-control" id="txt_nama_brg_1" name="txt_nama_brg_1" placeholder="Nama Barang" readonly>
+										</td>
+										<td>
+											<input type="text" class="form-control currencyduadigit" id="txt_qty_1" name="txt_qty_1" placeholder="Qty">
+											<!-- <label id="lbl_qty_po_1">Qty PO : </label> -->
+											<!-- <label id="lbl_sisa_qty_1">Sisa Qty : </label> -->
+
+											<!-- <input type="hidden" id="hidden_qty_po_1" name="hidden_qty_po_1"> -->
+											<!-- <input type="hidden" id="hidden_sisa_qty_1" name="hidden_sisa_qty_1"> -->
+										</td>
+										<td>
+											<input type="text" class="form-control" id="txt_satuan_1" name="txt_satuan_1" placeholder="Satuan" readonly>
+											<label id="lbl_grup_1" name="lbl_grup_1">Grup : -</label>
+
+											<input type="hidden" id="hidden_grup_1" name="hidden_grup_1">
+										</td>
+										<td>
+											<textarea class="resizable_textarea form-control" id="txt_ket_rinci_1" name="txt_ket_rinci_1" placeholder="Keterangan" onkeypress="saveRinciEnter(event,1)"></textarea>
+											<label id="lbl_status_simpan_1"></label>
+											<input type="hidden" id="hidden_id_masuk_item_1" name="hidden_id_masuk_item_1">
+										</td>
+										<td>
+											<button class="btn btn-xs btn-success fa fa-save" id="btn_simpan_1" name="btn_simpan_1" type="button" data-toggle="tooltip" data-placement="right" title="Simpan" onclick="saveRinciClick('1')"></button>
+											<button style="display:none;" class="btn btn-xs btn-warning fa fa-edit" id="btn_ubah_1" name="btn_ubah_1" type="button" data-toggle="tooltip" data-placement="right" title="Ubah" onclick="ubahRinci('1')"></button>
+											<button style="display:none;" class="btn btn-xs btn-info fa fa-check" id="btn_update_1" name="btn_update_1" type="button" data-toggle="tooltip" data-placement="right" title="Update" onclick="updateRinci('1')"></button>
+											<button style="display:none;" class="btn btn-xs btn-primary fa fa-close" id="btn_cancel_update_1" name="btn_cancel_update_1" type="button" data-toggle="tooltip" data-placement="right" title="Cancel Update" onclick="cancelUpdate('1')"></button>
+											<button style="display:none;" class="btn btn-xs btn-danger fa fa-trash" id="btn_hapus_1" name="btn_hapus_1" type="button" data-toggle="tooltip" data-placement="right" title="Hapus" onclick="hapusRinci('1')"></button>
+										</td>
+									</form>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<br />
+	<br />
+
+	<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="modalDataPO">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">Pilih PO</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-horizontal">
+						<div class="table-responsive">
+							<table id="tableDetailPO" class="table table-bordered" width="100%">
+								<thead>
+									<tr>
+										<th>No.</th>
+										<th>Tgl</th>
+										<th>Ref. PO</th>
+										<th>No. PO</th>
+										<th>Supplier</th>
+										<th>Lokasi Beli</th>
+									</tr>
+								</thead>
+								<tbody id="tbodyDetailSPP">
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="modalListBarang">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">List Barang</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-horizontal">
+						<div class="form-group">
+							<div class="table-responsive">
+								<input type="hidden" id="hidden_no_row" name="hidden_no_row">
+								<table id="tableListBarang" class="table table-bordered" style="width: 100%;">
+									<thead>
+										<tr>
+											<th style="width: 5% !important;">No</th>
+											<th style="width: 10% !important;">Kode Barang</th>
+											<th style="width: 20% !important;">Nama Barang</th>
+										</tr>
+									</thead>
+									<tbody id="tbody_listbarang">
+									</tbody>
+								</table>
+							</div>	
+						</div>
+						<div class="form-group">
+							<div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-6">
+								<button class="btn btn-sm btn-info" data-toggle="tooltip" data-placement="bottom" title="Setujui Semua" id="btn_setuju_all" name="btn_setuju_all" onclick="pilihItem()">Pilih Item</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="modalBarang">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">List Barang</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-horizontal">
+						<div class="form-group">
+							<div class="table-responsive">
+								<input type="hidden" id="hidden_no_row_barang" name="hidden_no_row_barang">
+								<table id="tableBarang" class="table table-bordered" style="width: 100%;">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>No</th>
+											<th>Kode Barang</th>
+											<th>Nama Barang</th>
+										</tr>
+									</thead>
+									<tbody id="tbody_listbarang">
+									</tbody>
+								</table>
+							</div>	
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="modalKonfirmasiHapus">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">Konfirmasi Hapus</h4>
+				</div>
+				<div class="modal-body">
+					<input type="hidden" id="hidden_no_delete" name="hidden_no_delete">
+					<p>Apakah Anda yakin ingin menghapus data ini ???</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" id="btn_delete" onclick="deleteData()" >Hapus</button>
+					<button type="button" class="btn btn-default btn_close" data-dismiss="modal">Tutup</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true" id="modalPilihCompany">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel">Pilih Company</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-horizontal">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="col-md-2">Company :</label>
+								<div class="col-md-8">
+									<select class="form-control" id="cmb_company">
+										<?php 
+											foreach ($get_pt as $list_pt) {
+										?>
+											<option value="<?= $list_pt->kodetxt; ?>"><?= $list_pt->PT; ?></option>
+										<?php
+											}
+										?>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-2">Account :</label>
+								<div class="col-md-8">
+									<select class="form-control" id="cmb_acc_hutang_usaha">
+										<option value="<?= $get_acc_hutang_dagang->noac; ?>"><?= $get_acc_hutang_dagang->noac; ?> - <?= $get_acc_hutang_dagang->nama; ?></option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-info" id="btn_delete" onclick="pilihCompany()" >Pilih</button>
+					<!-- <button type="button" class="btn btn-primary" id="btn_delete" data-dismiss="modal">Bukan Mutasi</button> -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+<input type="hidden" id="hidden_no_table" name="hidden_no_table">
+
+<script src="<?php echo base_url(); ?>assets/gentelella/vendors/jquery/dist/jquery.min.js"></script>
+
+<!-- JQuery Number -->
+<script src="<?php echo base_url();?>assets/jquerynumber/jquery.number.js"></script>
+
+<script>
+	$(document).ready(function(){
+		$('#a_lpb_baru').hide();
+		$('#div_bkb_dari_pt').hide();
+		$('#modalPilihCompany').modal('show');
+
+		$('#hidden_no_table').val(2);
+
+		$('#txt_tgl_retur,#txt_tgl_lpb').daterangepicker({
+			singleDatePicker:!0,
+			singleClasses:"picker_1"
+
+		},function(start,end,label){
+		});
+
+		setInterval(function(){
+		  // check_form_1();
+		}, 1000);
+	})
+
+	function dateToMDY(date) {
+		var d = date.getDate();
+		var m = date.getMonth() + 1;
+		var y = date.getFullYear();
+		// return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+		return (m<=9 ? '0' + m : m) + '/' + (d <= 9 ? '0' + d : d) + '/' + y;
+  	}
+
+	function getEventLPB(e,value){
+		if(e.keyCode == 13 && !e.shiftKey){
+			if($.trim(value) == ""){
+				//no action
+			}
+			else{
+				var txt_no_lpb = $('#txt_no_lpb').val();
+				var txt_ref_lpb = $('#txt_ref_lpb').val();
+				getLPB(txt_no_lpb,txt_ref_lpb);
+			}
+		}
+	}
+
+	function getLPB(txt_no_lpb,txt_ref_lpb){
+		var form_data = new FormData();
+
+   		$.ajax({
+			type    : "POST",
+			url     : "<?php echo site_url('retur_lpb/get_lpb'); ?>",
+			dataType  : "JSON",
+			beforeSend: function() {
+
+			},
+			cache   : false,
+			// contentType : false,
+			// processData : false,
+
+			data    : {'txt_no_lpb':txt_no_lpb,'txt_ref_lpb':txt_ref_lpb},
+			success: function(data){
+				var tgl_lpb = new Date(data.data_stokmasuk.tgl);
+				var tgl_po = new Date(data.data_po.tglpo);
+				
+				var no_lpb = data.data_stokmasuk.ttgtxt;
+				var no_ref_lpb = data.data_stokmasuk.noref;
+				var no_pengantar = data.data_stokmasuk.no_pengtr;
+				var no_po = data.data_stokmasuk.nopotxt;
+				var no_ref_po = data.data_stokmasuk.refpo;
+				var kode_supply = data.data_stokmasuk.kode_supply;
+				var nama_supply = data.data_stokmasuk.nama_supply;
+				var lokasi_gudang = data.data_stokmasuk.lokasi_gudang;
+				var ket = data.data_stokmasuk.ket;
+
+				$('#txt_no_lpb').val(no_lpb);
+				$('#txt_ref_lpb').val(no_ref_lpb);
+				$('#txt_tgl_lpb').val(dateToMDY(tgl_lpb));
+				$('#txt_no_pengantar').val(no_pengantar);
+				$('#txt_no_po').val(no_po);
+				$('#txt_ref_po').val(no_ref_po);
+				$('#txt_kd_supplier').val(kode_supply);
+				$('#txt_supplier').val(nama_supply);
+				$('#txt_lokasi_gudang').val(lokasi_gudang);
+				$('#txt_tgl_po').val(dateToMDY(tgl_po));
+				$('#txt_ket_pengiriman').val(lokasi_gudang);
+			},
+			error   : function(request){
+				alert(request.responseText);
+			}
+  	    });
+	}
+
+	function pilihCompany(){
+		$('#modalPilihCompany').modal('hide');
+		var kode_pt = $('#cmb_company').val();
+		var nama_pt = $('#cmb_company :selected').text();
+		var cmb_acc_hutang_usaha = $('#cmb_acc_hutang_usaha').val();
+
+		$('#hidden_kode_pt').val(kode_pt);
+		$('#hidden_nama_pt').val(nama_pt);
+		$('#lbl_nama_pt').html(nama_pt);
+		$('#hidden_acc_hutang_usaha').val(cmb_acc_hutang_usaha);
+	}
+
+	function pilihModalBarang(row){
+		$('#modalBarang').modal('show');
+		tableBarang();
+		$('#hidden_no_row_barang').val(row);
+	}
+
+	function tableBarang(){
+  		var no_lpb = $('#txt_no_lpb').val();
+		var no_ref_lpb = $('#txt_ref_lpb').val();
+
+  		// var no_lpb = '6205731';
+		// var no_ref_lpb = 'Est-LPB/swj/12/17/05731';
+
+		$('#tableBarang').DataTable().destroy();
+    	$('#tableBarang').DataTable({
+      		"paging"          : true,
+			"scrollY"         : false,
+			"scrollX"         : true,
+			"searching"       : true,
+			"select"          : true,
+			"bLengthChange"   : true,
+			"scrollCollapse"  : true,
+			"bPaginate"       : true,
+			"bInfo"           : true,
+			"bSort"           : false,
+			"processing"      : true,
+			"serverSide"      : true,
+			"order"           : [],
+			"fnRowCallback": function(nRow,aData,iDisplayIndex,iDisplayIndexFull){
+          	},
+          	"ajax"            : {
+          	  "url"         : "<?php echo site_url('retur_lpb/get_list_barang');?>",
+          	  "type"        : "POST",
+          	  "data"        : {'no_lpb':no_lpb,'no_ref_lpb':no_ref_lpb},
+          	  "error"       : function(request){
+          	    alert(request.responseText);
+          	  }
+          	},
+          	"columns"		: [
+          		{"width":"5%"},
+          		{"width":null},
+          		{"width":null},
+          		{"width":null},
+          	],
+			"columnDefs"    : [
+				{
+				  	"targets"   	 : [],
+				  	"orderable" 	 : false,
+				},
+			],
+			"drawCallback": function(settings) {
+	          	$('#tableBarang tr').each(function() {
+	            	var Cell = $(this).find('td');
+
+		        	Cell.parent().on('mouseover', Cell, function() {
+		          		Cell.parent().css('background-color', '#26b99a');
+		          		Cell.parent().css('color', '#ffffff');
+
+			        	Cell.parent().bind("mouseout", function() {
+		    	        	Cell.parent().css('background-color', '');
+		        	    	Cell.parent().css('color', '#73879c');
+		          		});
+		        	});
+	      		});
+          	},
+      	});
+   	}
+
+   	$('#tableBarang tbody').on('click', 'tr', function () {
+   		var dataClick = $('#tableBarang').DataTable().row( this ).data();
+        var no_row = $('#hidden_no_row_barang').val();
+
+        var no_lpb = $('#txt_no_lpb').val();
+		var no_ref_lpb = $('#txt_ref_lpb').val();
+
+        var kodebar = dataClick[2];
+        var nabar = dataClick[3];
+        
+        $('#txt_kode_barang_'+no_row).val(kodebar);
+        $('#txt_nama_brg_'+no_row).val(nabar);
+
+        getDetailBarang(no_lpb,no_ref_lpb,kodebar,nabar,no_row);
+        $('#modalBarang').modal('hide');
+   	})
+
+   	function getDetailBarang(no_lpb,no_ref_lpb,kodebar,nabar,no_row){
+   		var form_data = new FormData();
+
+   		$.ajax({
+			type    : "POST",
+			url     : "<?php echo site_url('retur_lpb/get_detail_barang'); ?>",
+			dataType  : "JSON",
+			beforeSend: function() {
+
+			},
+			cache   : false,
+			// contentType : false,
+			// processData : false,
+
+			data    : {'no_lpb':no_lpb,'no_ref_lpb':no_ref_lpb,'kodebar':kodebar,'nabar':nabar,'no_row':no_row},
+			success: function(data){
+				// console.log(data);
+				$('#txt_satuan_'+no_row).val(data.satuan);
+
+				$('#hidden_grup_'+no_row).val(data.grp);
+				$('#lbl_grup_'+no_row).html('Grup : '+data.grp);
+			},
+			error   : function(request){
+				alert(request.responseText);
+			}
+  	    });
+   	}
+
+   	function tambah_row(num_last){
+		var row = $('#hidden_no_table').val();
+		var tr_buka = '<tr id="tr_'+row+'">';
+		var td_col_1 = '<td>'
+							+'<input type="hidden" id="hidden_proses_status_'+row+'" name="hidden_proses_status_'+row+'" value="insert">'
+							+'<button class="btn btn-xs btn-info fa fa-plus" data-toggle="tooltip" data-placement="left" title="Tambah" id="btn_tambah_row" name="btn_tambah_row" onclick="tambah_row('+row+')"></button><br />'
+							+'<button class="btn btn-xs btn-danger fa fa-minus btn_hapus_row" type="button" data-toggle="tooltip" data-placement="left" title="Hapus" id="btn_hapus_row" name="btn_hapus_row" onclick="hapus_row('+row+')"></button>'
+						+'</td>';
+		var form_buka = '<form id="form_rinci_'+row+'" name="form_rinci_'+row+'" method="POST" action="javascript:;">';
+		var td_col_2 = '<td>'
+							+'<input type="text" class="form-control" id="txt_kode_barang_'+row+'" name="txt_kode_barang_'+row+'" placeholder="Kode Barang" onfocus="pilihModalBarang('+row+')" readonly>'
+							+'<label>'
+	                            +'<input type="checkbox" id="chk_asset_'+row+'" name="chk_asset_'+row+'" value=""> Asset ?'
+	                        +'</label>'
+						+'</td>';
+		var td_col_3 = '<td>'
+							+'<input type="text" class="form-control" id="txt_nama_brg_'+row+'" name="txt_nama_brg_'+row+'" placeholder="Nama Barang" readonly>'
+						+'</td>';
+		var td_col_4 = '<td>'
+							+'<input type="text" class="form-control currencyduadigit" id="txt_qty_'+row+'" name="txt_qty_'+row+'" placeholder="Qty">'
+							+'<!-- <label id="lbl_qty_po_'+row+'">Qty PO : </label> -->'
+							+'<!-- <label id="lbl_sisa_qty_'+row+'">Sisa Qty : </label> -->'
+							+'<input type="hidden" id="hidden_qty_po_'+row+'" name="hidden_qty_po_'+row+'">'
+							+'<!-- <input type="hidden" id="hidden_sisa_qty_'+row+'" name="hidden_sisa_qty_'+row+'"> -->'
+						+'</td>';
+		var td_col_5 = '<td>'
+							+'<input type="text" class="form-control" id="txt_satuan_'+row+'" name="txt_satuan_'+row+'" placeholder="Satuan" readonly>'
+							+'<label id="lbl_grup_'+row+'" name="lbl_grup_'+row+'">Grup : -</label>'
+							+'<input type="hidden" id="hidden_grup_'+row+'" name="hidden_grup_'+row+'">'
+						+'</td>';
+		var td_col_6 = '<td>'
+							+'<textarea class="resizable_textarea form-control" id="txt_ket_rinci_'+row+'" name="txt_ket_rinci_'+row+'" placeholder="Keterangan" onkeypress="saveRinciEnter(event,1)"></textarea>'
+							+'<label id="lbl_status_simpan_'+row+'"></label>'
+							+'<input type="hidden" id="hidden_id_masuk_item_'+row+'" name="hidden_id_masuk_item_'+row+'">'
+						+'</td>';
+		var td_col_7 = '<td>'
+							+'<button class="btn btn-xs btn-success fa fa-save" id="btn_simpan_'+row+'" name="btn_simpan_'+row+'" type="button" data-toggle="tooltip" data-placement="right" title="Simpan" onclick="saveRinciClick('+row+')"></button>'
+							+'<button style="display:none;" class="btn btn-xs btn-warning fa fa-edit" id="btn_ubah_'+row+'" name="btn_ubah_'+row+'" type="button" data-toggle="tooltip" data-placement="right" title="Ubah" onclick="ubahRinci('+row+')"></button>'
+							+'<button style="display:none;" class="btn btn-xs btn-info fa fa-check" id="btn_update_'+row+'" name="btn_update_'+row+'" type="button" data-toggle="tooltip" data-placement="right" title="Update" onclick="updateRinci('+row+')"></button>'
+							+'<button style="display:none;" class="btn btn-xs btn-primary fa fa-close" id="btn_cancel_update_'+row+'" name="btn_cancel_update_'+row+'" type="button" data-toggle="tooltip" data-placement="right" title="Cancel Update" onclick="cancelUpdate('+row+')"></button>'
+							+'<button style="display:none;" class="btn btn-xs btn-danger fa fa-trash" id="btn_hapus_'+row+'" name="btn_hapus_'+row+'" type="button" data-toggle="tooltip" data-placement="right" title="Hapus" onclick="hapusRinci('+row+')"></button>'
+						+'</td>';
+		var form_tutup = '</form>';
+		var tr_tutup = '</tr>';
+
+		$('#tbody_rincian').append(tr_buka+td_col_1+form_buka+td_col_2+td_col_3+td_col_4+td_col_5+td_col_6+td_col_7+form_tutup+tr_tutup);
+
+		$('html, body').animate({
+	        scrollTop: $("#tr_"+row).offset().top
+	    }, 2000);
+
+	    row++;
+		$('#hidden_no_table').val(row);
+	}
+
+	function saveRinciEnter(e,no){
+		if(e.keyCode == 13 && !e.shiftKey){
+		  	if($('#txt_qty_'+no).val() == '0') {
+		  		swal('Qty tidak boleh nol (0) !');
+	  	  	}
+	  	  	else if(parseInt($('#txt_qty_'+no).val()) > parseInt($('#hidden_sisa_qty_'+no).val())){
+		  		swal('Qty melebihi PO');
+	  	  	}
+	  	  	else {
+		  		if($('#hidden_proses_status_'+no).val() == 'insert'){
+	  	  		  saveRinci(no);
+	  	  		}
+	  	  		else if($('#hidden_proses_status_'+no).val() == 'update'){
+	  	  		  updateRinci(no);
+	  	  		}
+	  	  	}
+  	  	}
+  	}
+
+  	function saveRinciClick(no){
+  	  	if($('#txt_qty_'+no).val() == '0') {
+  	  		swal('Qty tidak boleh nol (0) !');
+  	  	}
+  	  	else if(parseInt($('#txt_qty_'+no).val()) > parseInt($('#hidden_sisa_qty_'+no).val())){
+  	  		swal('Qty melebihi PO');
+  	  	}
+  	  	else {
+  	  		if($('#hidden_proses_status_'+no).val() == 'insert'){
+  	  		  saveRinci(no);
+  	  		}
+  	  		else if($('#hidden_proses_status_'+no).val() == 'update'){
+  	  		  updateRinci(no);
+  	  		}
+  	  	}
+  	}
+
+  	function validasi(arr_id,no){
+  		if(Array.isArray(arr_id)){
+  			$.each(arr_id, function( index, value ){
+  				// $(arr_id[index]).css({
+  	            	// "background": "#FFCECE"
+  	            // })
+  	            // $(arr_id[index]).after('<div class="pesan_error"><br /><small style="margin-top:0px;color:red;">Harus diisi</small></div>');
+  			});
+  		}
+  		else{
+  			if($('#'+arr_id).is('input') || $('#'+arr_id).is('textarea')){
+  				if(arr_id == 'hidden_grup_'+no){
+  	            	$('#lbl_grup_'+no).css({
+  	            		"background": "#FFCECE"
+  	            	})
+  	            	if(!$('#lbl_grup_'+no).next().is('br#br_'+no)){
+  		            	$('#lbl_grup_'+no).after('<br id="br_'+no+'" /><small id="pesan_error_'+no+'" style="margin-top:0px;color:red;">Harus diisi</small>');	
+  	            	}
+  	            }
+  	            else{
+  					$('#'+arr_id).css({
+  		            	"background": "#FFCECE"
+  		            })
+  		            if(!$('#'+arr_id).next().is('br#br_'+no)){
+  			        	$('#'+arr_id).after('<br id="br_'+no+'" /><small id="pesan_error_'+no+'" style="margin-top:0px;color:red;">Harus diisi</small>');
+  			    	}
+  		        }
+  		    }
+  		}
+  	}
+
+  	function saveRinci(no){
+		var isValid = true;
+	    $('#txt_kode_barang_'+no+',#txt_nama_brg_'+no+',#txt_qty_'+no+',#hidden_grup_'+no+',#txt_satuan_'+no+',#txt_ket_rinci_'+no).each(function (e) {
+	        if ($.trim($(this).val()) == '') {
+	            isValid = false;
+	            validasi($(this).attr("id"),no);
+	        }
+	        else {
+	         	if($(this).attr('id') == 'hidden_grup_'+no){
+	             	$('#lbl_grup_'+no).css({
+	                	"background": ""
+	              	});
+	              	if($('#lbl_grup_'+no).next().is('br#br_'+no)){
+	               		$('#lbl_grup_'+no).next().remove();
+	               		$('#lbl_grup_'+no).next().remove();
+	           	  	}
+	            }
+	            else{
+					$(this).css({
+					  "background": ""
+					});
+					if($(this).next().is('br#br_'+no)){
+						$(this).next().remove();
+						$(this).next().remove();
+					}
+	          	}
+	        }
+	    });
+	    if (isValid == true){
+	        saveData(no);
+	    }
+  	}
+
+  	function saveData(no){
+  	  var form_data = new FormData();
+
+  	  if($('#chk_asset_'+no).is(':checked')){
+  	  	form_data.append('chk_asset','Asset');
+  	  }
+  	  else{
+  	  	form_data.append('chk_asset','');
+  	  }
+
+  	  form_data.append('txt_no_pengantar',$('#txt_no_pengantar').val());
+  	  form_data.append('txt_no_po',$('#txt_no_po').val());
+  	  form_data.append('txt_ref_po',$('#txt_ref_po').val());
+  	  form_data.append('txt_kd_supplier',$('#txt_kd_supplier').val());
+  	  form_data.append('txt_supplier',$('#txt_supplier').val());
+  	  form_data.append('txt_lokasi_gudang',$('#txt_lokasi_gudang').val());
+  	  form_data.append('txt_tgl_po',$('#txt_tgl_po').val());
+  	  form_data.append('txt_ket_pengiriman',$('#txt_ket_pengiriman').val());
+  	  
+  	  form_data.append('txt_kode_barang',$('#txt_kode_barang_'+no).val());
+  	  form_data.append('txt_nama_brg',$('#txt_nama_brg_'+no).val());
+  	  form_data.append('txt_qty',$('#txt_qty_'+no).val());
+  	  form_data.append('txt_satuan',$('#txt_satuan_'+no).val());
+  	  form_data.append('txt_ket_rinci',$('#txt_ket_rinci_'+no).val());
+  	  form_data.append('hidden_grup',$('#hidden_grup_'+no).val());
+
+  	  form_data.append('txt_no_lpb',$('#txt_no_lpb').val());
+  	  form_data.append('txt_ref_lpb',$('#txt_ref_lpb').val());
+
+  	  $.ajax({
+  	        type    : "POST",
+  	        url     : "<?php echo site_url('retur_lpb/simpan_rinci_lpb'); ?>",
+  	        dataType  : "JSON",
+  	        beforeSend: function() {
+  	          	$('#lbl_status_simpan_'+no).empty();
+  	          	$('#lbl_status_simpan_'+no).append('<label style="color:#f0ad4e;"><i class="fa fa-spinner fa-spin" style="font-size:24px;color:#f0ad4e;"></i> Proses Simpan</label>');
+  	          	if($.trim($('#txt_no_lpb').val()) == ''){
+  	            	$('#lbl_lpb_status').empty();
+  	            	$('#lbl_lpb_status').append('<label style="color:#f0ad4e;"><i class="fa fa-spinner fa-spin" style="font-size:24px;color:#f0ad4e;"></i> Generate PO Number</label>');
+  	          	}
+  	          	$('#btn_ubah_'+no).css('display','block');
+  	          	$('#btn_hapus_'+no).css('display','block');
+  	        },
+  	        cache   : false,
+  	        contentType : false,
+  	        processData : false,
+  	        
+  	        data    : form_data,
+  	        success: function(data){
+  	          if(data === "input_stock_awal"){
+  	          	swal("Stock Awal belum ada, silahkan input dahulu !", {
+  	          	  buttons: {
+  	          	    ya: {
+  	          	      text: "Ya",
+  	          	      value: "iya",
+  	          	    },
+  	          	    cancel: "Tutup",
+  	          	  },
+  	          	})
+  	          	.then((value) => {
+  	          	  switch (value) {
+  	          	 	case "iya":
+  	          	      window.open('<?php echo site_url('stock_awal'); ?>','_blank');
+  	          	      break;
+  	          	 	default:
+  	          	      swal.close();
+  	          	  }
+  	          	});
+  	          	$('#lbl_status_simpan_'+no).empty();
+	        	$('#lbl_status_simpan_'+no).append('<label style="color:#ff0000;"><i class="fa fa-close" style="color:#ff0000;"></i> Gagal Tersimpan !</label>');
+  	          }
+  	          else if(data == "kodebar_exist"){
+        		swal('Tidak bisa ditambahkan. Barang sudah ada pada LPB yang sama !');
+        		$('#lbl_status_simpan_'+no).empty();
+	        	$('#lbl_status_simpan_'+no).append('<label style="color:#ff0000;"><i class="fa fa-close" style="color:#ff0000;"></i> Gagal Tersimpan !</label>');
+        	  }
+        	  else{
+        	  	if(data.status == true){
+        	  		$('#a_lpb_baru').show();
+
+        	  		$('.div_form_1').find('input,textarea').not('#txt_no_po,#txt_tgl_po').attr('readonly','');
+        	  		$('.div_form_1').find('#txt_no_po,#txt_tgl_po').attr('disabled','');
+	  	            
+	  	            $('#tableRinciLPB tbody #tr_'+no+' td').find('input,textarea,select').not('#txt_kode_barang_'+no).attr('readonly','');
+	  	            $('#tableRinciLPB tbody #tr_'+no+' td').find('#btn_simpan_'+no+',#txt_kode_barang_'+no).attr('disabled','');
+
+	  	            $('#lbl_status_simpan_'+no).empty();
+	  	            $('#lbl_status_simpan_'+no).append('<label style="color:#6fc1ad;"><i class="fa fa-check" style="color:#6fc1ad;"></i> Berhasil disimpan</label>');
+
+	  	            $('#lbl_lpb_status').empty();
+	  	            $('#h4_no_lpb').empty();
+	  	            
+	  	            $('#h4_no_ref_lpb').empty();
+	  	            
+	  	            $('#h4_no_lpb').append('No. LPB : '+data.no_lpb);
+	  	            $('#h4_no_ref_lpb').append('No. Ref LPB : '+data.no_ref_lpb);
+
+	  	            $('#txt_no_lpb').val(data.no_lpb);
+	  	            $('#txt_ref_lpb').val(data.no_ref_lpb);
+
+	  	            if($.trim($('#hidden_id_stok_masuk').val()) == ''){
+		  	            $('#hidden_id_stok_masuk').val(data.id_stok_masuk);
+		  	        }
+	  	            $('#hidden_id_masuk_item_'+no).val(data.id_masuk_item);
+
+	  	            $('#btn_simpan_'+no).css('display','none');
+	  	        }
+				else{
+					alert('Error Save Data');
+				  	$('#lbl_status_simpan_'+no).empty();
+					$('#lbl_status_simpan_'+no).append('<label style="color:#ff0000;"><i class="fa fa-close" style="color:#ff0000;"></i> Gagal Tersimpan !</label>');
+				}
+        	  }
+  	        },
+  	        error   : function(request){
+  	          alert('Error Save Data : '+request.responseText);
+  	            
+  	          $('#lbl_status_simpan_'+no).empty();
+  	          $('#lbl_status_simpan_'+no).append('<label style="color:#ff0000;"><i class="fa fa-close" style="color:#ff0000;"></i> Gagal Tersimpan !</label>');
+  	          
+  	          if($.trim($('#txt_no_lpb').val()) == ''){
+  	            $('#lbl_spp_status').empty();
+  	            $('#lbl_spp_status').append('<label style="color:#ff0000;"><i class="fa fa-close" style="color:#ff0000;"></i> Gagal Generate !</label>');
+  	          }
+  	        }
+  	    });
+  	}
+
+</script>

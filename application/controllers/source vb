@@ -1,0 +1,370 @@
+
+Private Sub Command1_Click()
+    Dim itemttg As New ADODB.Recordset
+Dim stokawalx As New ADODB.Recordset
+Dim ITEMPO As New ADODB.Recordset
+
+If Text1 <> "MAKNYUS" Then
+    MsgBox "Password Salah Anda tdk Berhak menggunakan!!"
+    Text1.SetFocus
+    Exit Sub
+End If
+Me.MousePointer = 11
+ProgressBar1.Visible = True
+
+If itemttg.State = adStateOpen Then itemttg.Close
+itemttg.CursorLocation = adUseClient
+itemttg.CursorType = adOpenStatic
+itemttg.LockType = adLockOptimistic
+
+If ITEMPO.State = adStateOpen Then ITEMPO.Close
+ITEMPO.CursorLocation = adUseClient
+ITEMPO.CursorType = adOpenStatic
+ITEMPO.LockType = adLockOptimistic
+
+
+If stokawalx.State = adStateOpen Then stokawalx.Close
+stokawalx.CursorLocation = adUseClient
+stokawalx.CursorType = adOpenStatic
+stokawalx.LockType = adLockOptimistic
+
+Dim i As Long
+Dim kode_pt As String
+
+'Buat temp distinct kodebar
+Set wksp = DBEngine.Workspaces(0)   ' set up a transaction buffer
+wksp.BeginTrans      ' all record set changes are buffered after this
+'On Error GoTo roll0
+
+mydb.Execute "Delete * from temp_distkodebar"
+mydb.Execute "Delete * from temp_stockawal"
+ kode_pt = "01"
+  
+'cek tersedia kode stok awal
+If itemttg.State = adStateOpen Then itemttg.Close
+itemttg.Open "Select Distinct(kodebar),kodebar,nabar,satuan,grp,KDPT,PT from masukitem where kdpt='" & kode_pt & "' and CDBL(txtperiode)=" & CDbl(txtperiode1) & " AND BATAL=" & 0 & " order by kodebar", mydb
+If itemttg.RecordCount > 0 Then
+    itemttg.MoveFirst
+     i = 0
+      While Not itemttg.EOF
+          i = i + 1
+          itemttg.MoveNext
+      Wend
+      ProgressBar1.Max = i
+      ProgressBar1.Value = 0
+      itemttg.MoveFirst
+      Command3.Caption = "...cek data stock awal"
+      N = itemttg.RecordCount
+      i = 0
+    For i = 1 To itemttg.RecordCount
+        Command3.Caption = "...cek data stock awal " & N
+        N = N - 1
+        ProgressBar1.Value = ProgressBar1.Value + 1
+        KODEBAR = itemttg!KODEBAR
+        nabarstok = itemttg!nabar
+        kodeptx = itemttg!kdpt
+        namaptx = itemttg!pt
+        If stokawalx.State = adStateOpen Then stokawalx.Close
+        stokawalx.Open "Select * from stockawal where KODE='" & kode_pt & "' and cdbl(kodebar)='" & KODEBAR & "' and CDBL(txtperiode)='" & CDbl(txtperiode1) & "'  order by kodebar", mydb
+        If stokawalx.EOF Then
+            stokawalx.AddNew
+            stokawalx!pt = namaptx
+            stokawalx!kode = kodeptx
+            stokawalx!afd = "-"
+            stokawalx!KODEBAR = CDbl(KODEBAR)
+            stokawalx!kodebartxt = KODEBAR
+            stokawalx!nabar = nabarstok
+            stokawalx!satuan = itemttg!satuan
+            stokawalx!minstok = 0
+            stokawalx!saldoawal_qty = 0
+            stokawalx!saldoawal_nilai = 0
+            stokawalx!saldoakhir_qty = 0
+            stokawalx!saldoakhir_nilai = 0
+            stokawalx!thn = Year(periode1)
+            stokawalx!grp = itemttg!grp
+            stokawalx!periode = periode1
+            stokawalx!txtperiode = txtperiode1
+            stokawalx!ket = "-"
+            stokawalx!account = "-"
+            stokawalx!ket_account = "-"
+            stokawalx!tglinput = Now
+            stokawalx.Update
+        End If
+        itemttg.MoveNext
+        Next
+        
+End If
+        
+        
+If stokawalx.State = adStateOpen Then stokawalx.Close
+Set stokawalx = Nothing
+stokawalx.CursorLocation = adUseClient
+stokawalx.CursorType = adOpenStatic
+stokawalx.LockType = adLockOptimistic
+
+mydb.Execute "UPDATE stockawal SET QTY_masuk=0,QTY_KELUAR=0,QTY_ADJMASUK=0,QTY_ADJKELUAR=0,HARGAPORAT=0,saldoakhir_qty=0,saldoakhir_nilai=0,NILAI_MASUK=0 WHERE KODE='" & kode_pt & "' and cdbl(txtperiode)='" & txtperiode1 & "'"
+
+If itemttg.State = adStateOpen Then itemttg.Close
+Set itemttg = Nothing
+itemttg.CursorLocation = adUseClient
+itemttg.CursorType = adOpenStatic
+itemttg.LockType = adLockOptimistic
+
+
+
+'itemttg.Open "Select * from masuk_po where CDBL(txtperiode)=" & CDbl(txtperiode1) & " AND BATAL=" & 0 & " order by kodebar", mydb
+itemttg.Open "Select * from stockawal where KODE='" & kode_pt & "' and CDBL(txtperiode)='" & CDbl(txtperiode1) & "' order by kodebar", mydb
+
+Command3.Caption = itemttg.RecordCount
+If itemttg.RecordCount > 0 Then
+      itemttg.MoveFirst
+      i = 0
+      While Not itemttg.EOF
+          i = i + 1
+          itemttg.MoveNext
+      Wend
+      ProgressBar1.Max = i
+      ProgressBar1.Value = 0
+      itemttg.MoveFirst
+      Command3.Caption = "...Update LPB & Harga AVG PO"
+      N = itemttg.RecordCount
+      i = 0
+      nilaimasukawal = 0
+    For i = 1 To itemttg.RecordCount
+        Command3.Caption = "...Update LPB DAN Harga AVG PO" & N
+        N = N - 1
+        ProgressBar1.Value = ProgressBar1.Value + 1
+        KODEBAR = itemttg!KODEBAR
+        nilaimasukawal = itemttg!nilai_masuk
+        HARGASTOK = 0
+        STOK = 0
+        HARGARATA = 0
+        TOTALQTY = 0
+        totalharga = 0
+        hargastokfinal = 0
+        If stokawalx.State = adStateOpen Then stokawalx.Close
+        stokawalx.Open "Select * from masukitem where kdpt='" & kode_pt & "' and CINT(BATAL)=" & 0 & " AND cdbl(kodebar)='" & KODEBAR & "' and CDBL(txtperiode)='" & CDbl(txtperiode1) & "'  order by kodebar", mydb
+        If stokawalx.RecordCount > 0 Then
+            stokawalx.MoveFirst
+            qtylpb = 0
+            HARGASTOK = 0
+            z = 0
+            t = 0
+            KURS = ""
+            nilai = 0
+            harganet = 0
+            BIAYAPBBKB = 0
+            
+            For t = 1 To stokawalx.RecordCount
+                noref = stokawalx!refpo
+                qtylpb = stokawalx!qty + qtylpb
+                KURS = stokawalx!KURS
+                nilai = stokawalx!KONVERSI
+                    If ITEMPO.State = adStateOpen Then ITEMPO.Close
+                    ITEMPO.Open "Select * from item_po where kodept='" & kode_pt & "' and CINT(BATAL)=" & 0 & " AND cdbl(kodebar)='" & CDbl(KODEBAR) & "' and trim(noref)='" & Trim(noref) & "'  order by kodebar", mydb
+'
+                    If ITEMPO.RecordCount > 0 Then
+                            totalpo = ITEMPO.RecordCount
+                            BIAYAPBBKB = ITEMPO!JUMLAHBPO
+                        If totalpo > 1 Then
+
+                            If ITEMPO.State = adStateOpen Then ITEMPO.Close
+                            ITEMPO.Open "select sum(jumharga) as ttlharga,sum(qty) as ttlqty,sum(JUMLAHBPO) as ttlPBBKB from item_po WHERE   kodept='" & kode_pt & "' and CINT(BATAL)=" & 0 & " AND cdbl(kodebar)='" & CDbl(KODEBAR) & "' and trim(noref)='" & Trim(noref) & "'", mydb
+                            If IsNull(ITEMPO!ttlharga) = False Then
+                                        jumlahpo = ITEMPO!ttlharga
+                                        qtypo = ITEMPO!ttlqty
+                                        jumlahpo = (ITEMPO!ttlharga) / qtypo
+                                                qtypo = 1
+                                    harganet = jumlahpo
+                                    If KURS <> "Rp" Then
+                                        HARGASTOK = HARGASTOK + (harganet * nilai) + ITEMPO!ttlPBBKB
+                                    Else
+                                        HARGASTOK = HARGASTOK + (harganet * stokawalx!qty) + ITEMPO!ttlPBBKB
+                                    End If
+                            End If
+                            
+                            
+                        Else
+                   
+                            harganet = (ITEMPO!jumharga) / ITEMPO!qty
+                            If KURS <> "Rp" Then
+                                HARGASTOK = HARGASTOK + (harganet * nilai) + BIAYAPBBKB
+                            Else
+                                HARGASTOK = HARGASTOK + (harganet * stokawalx!qty) + BIAYAPBBKB
+                            End If
+                        End If
+                    End If
+                stokawalx.MoveNext
+            Next
+               If KODEBAR = "102505910000133" Then
+'
+                End If
+            'HARGASTOK = qtylpb * HARGASTOK
+            HARGASTOK = HARGASTOK
+            STOK = qtylpb + BAJUS
+            qtyretur = qtyretur + BAJUS
+'
+            If BAJUS <> 0 Then
+                ketretur = ketretur & "," & "BA Adjusment Stok"
+            End If
+
+            If ITEMPO.State = adStateOpen Then ITEMPO.Close
+            Set ITEMPO = Nothing
+            ITEMPO.CursorLocation = adUseClient
+            ITEMPO.CursorType = adOpenStatic
+            ITEMPO.LockType = adLockOptimistic
+            
+                    If stokawalx.State = adStateOpen Then stokawalx.Close
+                    Set stokawalx = Nothing
+                    stokawalx.CursorLocation = adUseClient
+                    stokawalx.CursorType = adOpenStatic
+                    stokawalx.LockType = adLockOptimistic
+
+                mydb.Execute "Update stockawal set qty_masuk='" & STOK & "',nilai_masuk='" & HARGASTOK & "'" & _
+                " where KODE='" & kode_pt & "' and kodebartxt='" & KODEBAR & "' and cdbl(txtperiode)='" & CDbl(txtperiode1) & "'"
+                 'harga rata
+     '           If stokawalx.State = adStateOpen Then stokawalx.Close
+                stokawalx.Open "Select * from STOCKAWAL where KODE='" & kode_pt & "' and cdbl(kodebar)='" & KODEBAR & "' and CDBL(txtperiode)='" & CDbl(txtperiode1) & "'  order by txtperiode ASC", mydb
+                If stokawalx.RecordCount > 0 Then
+                    stokawalx.MoveFirst
+                    totalharga = stokawalx!saldoawal_nilai
+                    TOTALQTY = stokawalx!saldoawal_qty
+    '
+                    If totalharga <> 0 And TOTALQTY <> 0 Then
+                        HARGARATA = (totalharga + HARGASTOK) / (STOK + TOTALQTY)
+                       '
+                    Else
+                        HARGARATA = HARGASTOK / STOK
+                    End If
+                End If
+                If HARGARATA <> 0 Then
+                   ' HARGARATA = CCur(HARGARATA)
+                End If
+                mydb.Execute "Update stockawal set HARGAPORAT='" & HARGARATA & "'" & _
+                " where KODE='" & kode_pt & "' and CDBL(TXTPERIODE)='" & txtperiode1 & "' AND kodebartxt='" & KODEBAR & "'"
+                    If stokawalx.State = adStateOpen Then stokawalx.Close
+                    Set stokawalx = Nothing
+                    stokawalx.CursorLocation = adUseClient
+                    stokawalx.CursorType = adOpenStatic
+                    stokawalx.LockType = adLockOptimistic
+
+        Else
+            'TIDAK ADA LPB KEMBALI KE SALDO AWAL
+           If stokawalx.State = adStateOpen Then stokawalx.Close
+            stokawalx.Open "Select * from STOCKAWAL where KODE='" & kode_pt & "' and cdbl(kodebar)='" & KODEBAR & "' and CDBL(txtperiode)='" & CDbl(txtperiode1) & "'  order by txtperiode ASC", mydb
+            If stokawalx.RecordCount > 0 Then
+                stokawalx.MoveFirst
+                totalharga = stokawalx!saldoawal_nilai
+                TOTALQTY = stokawalx!saldoawal_qty
+               If totalharga <> 0 And TOTALQTY <> 0 Then
+                    HARGARATA = totalharga / TOTALQTY
+                Else
+                    HARGARATA = 0
+                End If
+            End If
+            HARGASTOK = 0
+            
+            mydb.Execute "Update stockawal set  nilai_masuk='" & HARGASTOK & "', HARGAPORAT= '" & HARGARATA & "'" & _
+            " where KODE='" & kode_pt & "' and CDBL(TXTPERIODE)='" & txtperiode1 & "' AND kodebartxt='" & KODEBAR & "'"
+           
+        End If
+
+            If stokawalx.State = adStateOpen Then stokawalx.Close
+            Set stokawalx = Nothing
+            stokawalx.CursorLocation = adUseClient
+            stokawalx.CursorType = adOpenStatic
+            stokawalx.LockType = adLockOptimistic
+            If ITEMPO.State = adStateOpen Then ITEMPO.Close
+            Set ITEMPO = Nothing
+            ITEMPO.CursorLocation = adUseClient
+            ITEMPO.CursorType = adOpenStatic
+            ITEMPO.LockType = adLockOptimistic
+            
+    itemttg.MoveNext
+    Next
+End If
+            If stokawalx.State = adStateOpen Then stokawalx.Close
+            Set stokawalx = Nothing
+            stokawalx.CursorLocation = adUseClient
+            stokawalx.CursorType = adOpenStatic
+            stokawalx.LockType = adLockOptimistic
+            If ITEMPO.State = adStateOpen Then ITEMPO.Close
+            Set ITEMPO = Nothing
+            ITEMPO.CursorLocation = adUseClient
+            ITEMPO.CursorType = adOpenStatic
+            ITEMPO.LockType = adLockOptimistic
+            If itemttg.State = adStateOpen Then itemttg.Close
+            Set itemttg = Nothing
+            itemttg.CursorLocation = adUseClient
+            itemttg.CursorType = adOpenStatic
+            itemttg.LockType = adLockOptimistic
+            
+        HARGASTOK = 0
+        STOK = 0
+        HARGARATA = 0
+        TOTALQTY = 0
+        totalharga = 0
+        hargastokfinal = 0
+itemttg.Open "Select * from keluar_QUERY where KODE='" & kode_pt & "' and CDBL(txtperiode)=" & CDbl(txtperiode1) & " AND BATAL=" & 0 & " order by kodebarTXT", mydb
+Command3.Caption = itemttg.RecordCount
+'
+If itemttg.RecordCount > 0 Then
+      itemttg.MoveFirst
+      i = 0
+      While Not itemttg.EOF
+          i = i + 1
+          itemttg.MoveNext
+      Wend
+      ProgressBar1.Max = i
+      ProgressBar1.Value = 0
+      itemttg.MoveFirst
+      Command3.Caption = "...Update BKB"
+      N = itemttg.RecordCount
+      i = 0
+    For i = 1 To itemttg.RecordCount
+        Command3.Caption = "...Update BKB " & N
+        N = N - 1
+        ProgressBar1.Value = ProgressBar1.Value + 1
+        
+        
+        KODEBAR = itemttg!kodebartxt
+        STOK = itemttg![SumOfqty]
+        
+        
+        mydb.Execute "Update stockawal set qty_KELUAR='" & STOK & "'" & _
+        " where KODE='" & kode_pt & "' and kodebartxt='" & KODEBAR & "' and cdbl(txtperiode)='" & CDbl(txtperiode1) & "'"
+        itemttg.MoveNext
+'
+    Next
+End If
+            If itemttg.State = adStateOpen Then itemttg.Close
+            Set itemttg = Nothing
+            itemttg.CursorLocation = adUseClient
+            itemttg.CursorType = adOpenStatic
+            itemttg.LockType = adLockOptimistic
+ 
+Command3.Caption = "...Update SALDO Data Stock "
+mydb.Execute "Update stockawal set saldoakhir_qty=  (stockawal!saldoawal_qty + stockawal!QTY_MASUK) - stockawal!QTY_KELUAR," & _
+            " saldoakhir_nilai= CCUR((stockawal!saldoawal_nilai+ stockawal!nilai_masuk ) - (stockawal!QTY_KELUAR * stockawal!HARGAPORAT))" & _
+            " where KODE='" & kode_pt & "' and cdbl(txtperiode)='" & CDbl(txtperiode1) & "'"
+'
+    wksp.CommitTrans      ' here we write the changes to disk all at once
+
+    GoTo finish_it
+roll0:
+    MsgBox Err.Number & " " & Err.Description
+    wksp.Rollback   ' cancel everything if unexpected error
+
+finish_it:
+SELESAI:
+    ProgressBar1.Visible = False
+    Me.MousePointer = 0
+    Command3.Caption = "SELESAI"
+
+    MsgBox "Selesai"
+    Unload Me
+    Exit Sub
+bawah:
+    MsgBox Err.Description & "- COBA ULANGI KEMBALI DENGAN KELUAR DARI SYSTEM!"
+End Sub
+    
