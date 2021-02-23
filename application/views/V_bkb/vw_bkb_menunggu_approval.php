@@ -1,21 +1,22 @@
 <style type="text/css">
 	td.details-control {
-	    background: url('/app_logistik_msal/assets/icon/info.png') no-repeat center center;
-	    cursor: pointer;
+		background: url('/app_logistik_msal/assets/icon/info.png') no-repeat center center;
+		cursor: pointer;
 	}
+
 	tr.details td.details-control {
-	    background: url('/app_logistik_msal/assets/icon/minus.png') no-repeat center center;
+		background: url('/app_logistik_msal/assets/icon/minus.png') no-repeat center center;
 	}
 
 	@media (min-width: 768px) {
-	  .modal-xl {
-	    width: 90%;
-	   max-width:1200px;
-	  }
+		.modal-xl {
+			width: 90%;
+			max-width: 1200px;
+		}
 	}
 
 	.modal {
-	  overflow-y:auto;
+		overflow-y: auto;
 	}
 </style>
 <div class="">
@@ -33,7 +34,7 @@
 					<h2>Request Rev. Qty BKB</h2>
 					<!-- <div class="form-group nav navbar-right">
 						<button class="btn btn-primary btn-sm fa fa-filter" onclick="showHideFilter()"> Filter</button>
-					</div> -->	
+					</div> -->
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">
@@ -60,6 +61,11 @@
 					<br />
 					<br />
 				</div>
+
+				<!-- TEST 1 (MENCAPAI FOOTER) -->
+				<div style="height: 420px;">
+
+				</div>
 			</div>
 		</div>
 	</div>
@@ -80,7 +86,7 @@
 					<textarea class="form-control" id="txt_alasan_batal_bkb" name="txt_alasan_batal_bkb"></textarea>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-warning" id="btn_batalkanBKB" onclick="batalBKB()" >Batalkan BKB</button>
+					<button type="button" class="btn btn-warning" id="btn_batalkanBKB" onclick="batalBKB()">Batalkan BKB</button>
 					<button type="button" class="btn btn-default btn_close" data-dismiss="modal">Tutup</button>
 				</div>
 			</div>
@@ -120,17 +126,16 @@
 					</table>
 				</div>
 				<div class="modal-footer">
-					<!-- <?php 
-						if($status2 == "1"){
-					?>
+					<!-- <?php
+							if ($status2 == "1") {
+							?>
 					<button type="button" class="btn btn-success" id="btn_setuju" onclick="setuju()" >Setuju</button>
 					<?php
-						}
-						elseif($status2 == "4") {
+							} elseif ($status2 == "4") {
 					?>
 					<button type="button" class="btn btn-warning" id="btn_mengetahui" onclick="setuju()" >Mengetahui</button>
 					<?php
-						}
+							}
 					?> -->
 					<button type="button" class="btn btn-default btn_close" data-dismiss="modal">Tutup</button>
 				</div>
@@ -143,7 +148,7 @@
 <script src="<?php echo base_url(); ?>assets/gentelella/vendors/jquery/dist/jquery.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/gentelella/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
 <script>
-	$(document).ready(function(){
+	$(document).ready(function() {
 		// $('#div_filter').hide();
 		// var filter = "Semua";
 		// listBKB(filter);
@@ -151,34 +156,33 @@
 
 	});
 
-	function listBKB(){
+	function listBKB() {
 		$('#tableListBKB').DataTable().destroy();
 		var dt = $('#tableListBKB').DataTable({
-		  "paging"	        : true,
-      	  "scrollY"         : true,
-          "scrollX"         : true,
-          "searching"       : true,
-          "select"          : false,
-          "bLengthChange"   : true,
-          "scrollCollapse"  : true,
-          "bPaginate"       : true,
-          "bInfo"           : true,
-          "bSort"           : false,
-          "processing"      : true,
-          "serverSide"      : true,
-          "order"           : [],
-          "fnRowCallback": function(nRow,aData,iDisplayIndex,iDisplayIndexFull){
-          },
-          "ajax"            : {
-            "url"         : "<?php echo site_url('bkb/list_appr_rev_qty_bpb');?>",
-            "type"        : "POST",
-            "data"        : {},
-            "error"       : function(request){
-              alert(request.responseText);
-              console.log(request.responseText);
-            }
-          },
-          // "columns": [
+			"paging": true,
+			"scrollY": true,
+			"scrollX": true,
+			"searching": true,
+			"select": false,
+			"bLengthChange": true,
+			"scrollCollapse": true,
+			"bPaginate": true,
+			"bInfo": true,
+			"bSort": false,
+			"processing": true,
+			"serverSide": true,
+			"order": [],
+			"fnRowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {},
+			"ajax": {
+				"url": "<?php echo site_url('bkb/list_appr_rev_qty_bpb'); ?>",
+				"type": "POST",
+				"data": {},
+				"error": function(request) {
+					alert(request.responseText);
+					console.log(request.responseText);
+				}
+			},
+			// "columns": [
 			// { 
 			// 	"class" 		: "details-control",
 			// 	"orderable"		: false,
@@ -186,87 +190,86 @@
 			// 	"defaultContent": ""
 			// },
 			// { "data": "0" },
-   //          { "data": "1" },
-   //          { "data": "2" },
-   //          { "data": "3" },
-   //          { "data": "4" },
-   //          { "data": "5" },
-   //          { "data": "6" },
-		  // ],
-          "columnDefs"    : [
-            {
-              "targets"   : [],
-              "orderable" : false,
-            },
-          ],
-    	});
+			//          { "data": "1" },
+			//          { "data": "2" },
+			//          { "data": "3" },
+			//          { "data": "4" },
+			//          { "data": "5" },
+			//          { "data": "6" },
+			// ],
+			"columnDefs": [{
+				"targets": [],
+				"orderable": false,
+			}, ],
+		});
 
-    	var detailRows = [];
- 
-	    $('#tableListBKB tbody').on( 'click', 'tr td.details-control', function () {
-	        var tr = $(this).closest('tr');
-	        var row = dt.row( tr );
-	        var idx = $.inArray( tr.attr('id'), detailRows );
-	        
-	        if ( row.child.isShown() ) {
-	            tr.removeClass( 'details' );
-	            row.child.hide();
-	 
-	            // Remove from the 'open' array
-	            detailRows.splice( idx, 1 );
-	        }
-	        else {
-	            tr.addClass( 'details' );
-	            row.child( format( row.data()[1] ) ).show();
-	 
-	            // Add to the 'open' array
-	            if ( idx === -1 ) {
-	                detailRows.push( tr.attr('id') );
-	            }
-	        }
-	    } );
+		var detailRows = [];
 
-	    dt.on( 'draw', function () {
-	        $.each( detailRows, function ( i, id ) {
-	        	$('#'+id+' td.details-control').trigger( 'click' );
-	        } );
-	    } );
+		$('#tableListBKB tbody').on('click', 'tr td.details-control', function() {
+			var tr = $(this).closest('tr');
+			var row = dt.row(tr);
+			var idx = $.inArray(tr.attr('id'), detailRows);
+
+			if (row.child.isShown()) {
+				tr.removeClass('details');
+				row.child.hide();
+
+				// Remove from the 'open' array
+				detailRows.splice(idx, 1);
+			} else {
+				tr.addClass('details');
+				row.child(format(row.data()[1])).show();
+
+				// Add to the 'open' array
+				if (idx === -1) {
+					detailRows.push(tr.attr('id'));
+				}
+			}
+		});
+
+		dt.on('draw', function() {
+			$.each(detailRows, function(i, id) {
+				$('#' + id + ' td.details-control').trigger('click');
+			});
+		});
 	}
 
-	function ApprReqRevQty(no_bpb, norefbpb, kodebar){
+	function ApprReqRevQty(no_bpb, norefbpb, kodebar) {
 		var user_sesi = '<?php echo $this->session->userdata('user'); ?>'
-		if(user_sesi != 'KTU'){
+		if (user_sesi != 'KTU') {
 			swal('Maaf hanya KTU yang memiliki akses ini !');
-		}
-		else{
+		} else {
 			var conf = confirm('Approve agar user bisa revisi qty ?');
-			if(conf){
+			if (conf) {
 				$.ajax({
-			        type    : "POST",
-			        url     : "<?php echo site_url('bkb/approve_req_rev_qty'); ?>",
-			        dataType  : "JSON",
-			        beforeSend: function(){
-			        },
-			        cache   : false,
-			        // contentType : false,
-			        // processData : false,
-			        
-			        data    : {'no_bpb' : no_bpb, 'norefbpb': norefbpb, 'kodebar': kodebar},
-			        success: function(data){
-			        	listBKB();
-			        	new PNotify({
-			                title: 'Sukses',
-		                    text: 'Data Berhasil diapprove',
-		                    type: 'success',
-		                    // hide: false,
-		                    styling: 'bootstrap3'
-			            });
-			        },
-			        error   : function(request){
-			          alert(request.responseText);
-			        }
-			    });
-			}	
+					type: "POST",
+					url: "<?php echo site_url('bkb/approve_req_rev_qty'); ?>",
+					dataType: "JSON",
+					beforeSend: function() {},
+					cache: false,
+					// contentType : false,
+					// processData : false,
+
+					data: {
+						'no_bpb': no_bpb,
+						'norefbpb': norefbpb,
+						'kodebar': kodebar
+					},
+					success: function(data) {
+						listBKB();
+						new PNotify({
+							title: 'Sukses',
+							text: 'Data Berhasil diapprove',
+							type: 'success',
+							// hide: false,
+							styling: 'bootstrap3'
+						});
+					},
+					error: function(request) {
+						alert(request.responseText);
+					}
+				});
+			}
 		}
 	}
 </script>

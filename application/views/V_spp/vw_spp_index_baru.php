@@ -29,11 +29,11 @@
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">
-					
+
 					<table id="tableListSPP" class="table table-striped table-bordered" width="100%">
 						<thead>
 							<tr>
-								
+
 								<th>#</th>
 								<th>No.</th>
 								<th>No. SPP</th>
@@ -53,6 +53,11 @@
 					</table>
 					<br />
 					<br />
+				</div>
+
+				<!-- TEST 1 (MENCAPAI FOOTER) -->
+				<div style="height: 390px;">
+
 				</div>
 			</div>
 		</div>
@@ -93,7 +98,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-success" id="btn_pilih_po" onclick="pilihEST()" >Pilih</button>
+					<button type="button" class="btn btn-success" id="btn_pilih_po" onclick="pilihEST()">Pilih</button>
 				</div>
 			</div>
 		</div>
@@ -109,12 +114,12 @@
 		var filter = "Semua";
 		var cari_no_spp = "";
 		$('#modalPilihEstate').modal('show');
-        pilihDevisi();
-        pilihDevisiFilter();
+		pilihDevisi();
+		pilihDevisiFilter();
 		listSPP(filter, cari_no_spp);
 	});
 
-	function pilihDevisi(){
+	function pilihDevisi() {
 		$.ajax({
 			type: "POST",
 			url: "<?php echo site_url('spp/cari_devisi'); ?>",
@@ -133,8 +138,8 @@
 			}
 		});
 	}
-	
-	function pilihDevisiFilter(){
+
+	function pilihDevisiFilter() {
 		$.ajax({
 			type: "POST",
 			url: "<?php echo site_url('spp/cari_devisi'); ?>",
@@ -156,17 +161,17 @@
 		});
 	}
 
-	function pilihEST(){
-  		$('#modalPilihEstate').modal('hide');
-  		var est = $('#cmb_pilih_est').val();
-  		// console.log(est);
+	function pilihEST() {
+		$('#modalPilihEstate').modal('hide');
+		var est = $('#cmb_pilih_est').val();
+		// console.log(est);
 		var filter = est;
 		var cari_no_spp = "";
-		$('#filter option[value="'+est+'"]').attr("selected", true);
+		$('#filter option[value="' + est + '"]').attr("selected", true);
 		listSPP(filter, cari_no_spp);
-  	}
-	
-	$('#filter').change(function(){
+	}
+
+	$('#filter').change(function() {
 		var filter = this.value;
 		console.log(filter);
 		var cari_no_spp = "";

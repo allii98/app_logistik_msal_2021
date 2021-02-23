@@ -32,10 +32,10 @@
                 <a href="<?php echo site_url('spp/input'); ?>" class="btn btn-sm btn-info" id="a_spp_baru"><span class="fa fa-plus"></span> SPP Baru</a>
                 <div class="x_content">
                     <br />
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div data-parsley-validate class="form-horizontal form-label-left">
                             <div class="form-group div_form_1">
-                                <label class="control-label col-md-6 col-sm-3 col-xs-12">Jenis Permohonan <span class="required">*</span></label>
+                                <label class="control-label col-md-6 col-sm-3 col-xs-12">Jenis SPP <span class="required">*</span></label>
                                 <label class="control-label col-md-6 col-sm-3 col-xs-12">Alokasi <span class="required">*</span></label>
                             </div>
                             <div class="form-group div_form_1">
@@ -73,10 +73,9 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="ln_solid"></div>
                         </div>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-9">
                         <div data-parsley-validate class="form-horizontal form-label-left">
                             <div class="form-group div_form_2">
                                 <label class="control-label col-md-2 col-sm-3 col-xs-12">Tgl. Referensi <span class="required">*</span></label>
@@ -92,7 +91,7 @@
                                     <input id="txt_tgl_terima" name="txt_tgl_terima" class="form-control col-md-7 col-xs-12" required="required" type="text" data-date-format="yyyy-mm-dd" placeholder="Tgl. Terima" readonly>
                                 </div>
                                 <input id="txt_tanggal" name="txt_tanggal" class="form-control col-md-7 col-xs-12" required="required" type="hidden" data-date-format="yyyy-mm-dd" placeholder="Tanggal" readonly>
-                                
+
                                 <div class="col-md-2 col-sm-6 col-xs-12">
                                     <select class="form-control" id="cmb_departemen" name="cmb_departemen" onchange="setKodeDept(this.value)">
                                         <option value="">-- Pilih --</option>
@@ -118,60 +117,65 @@
                             <input type="hidden" id="hidden_id_ppo" name="hidden_id_ppo">
                             <input type="hidden" id="hidden_no_ref_ppo" name="hidden_no_ref_ppo">
                             <!-- <div class="table-responsive"> -->
-                                <table id="tableRinciBarang" class="table table-striped table-bordered table-in">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Kode Barang</th>
-                                            <th>Qty</th>
-                                            <th>Merk/Type/Jenis</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbody_rincian" name="tbody_rincian">
-                                        <tr id="tr_1">
-                                            <td width="3%">
-                                                <input type="hidden" id="hidden_proses_status_1" name="hidden_proses_status_1" value="insert">
-                                                <button class="btn btn-xs btn-info fa fa-plus" data-toggle="tooltip" data-placement="left" title="Tambah" id="btn_tambah_row" name="btn_tambah_row" onclick="tambah_row()"></button>
-                                                <button class="btn btn-xs btn-danger fa fa-minus" type="button" data-toggle="tooltip" data-placement="left" title="Hapus" id="btn_hapus_row_1" name="btn_hapus_row_1" onclick="hapus_row('1')"></button>
+                            <table id="tableRinciBarang" class="table table-striped table-bordered table-in">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Kode Barang</th>
+                                        <th>Qty</th>
+                                        <th>Merk/Type/Jenis</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_rincian" name="tbody_rincian">
+                                    <tr id="tr_1">
+                                        <td width="3%">
+                                            <input type="hidden" id="hidden_proses_status_1" name="hidden_proses_status_1" value="insert">
+                                            <button class="btn btn-xs btn-info fa fa-plus" data-toggle="tooltip" data-placement="left" title="Tambah" id="btn_tambah_row" name="btn_tambah_row" onclick="tambah_row()"></button>
+                                            <button class="btn btn-xs btn-danger fa fa-minus" type="button" data-toggle="tooltip" data-placement="left" title="Hapus" id="btn_hapus_row_1" name="btn_hapus_row_1" onclick="hapus_row('1')"></button>
+                                        </td>
+                                        <form id="form_rinci_1" name="form_rinci_1" method="POST" action="javascript:;">
+                                            <td width="30%">
+                                                <input type="text" class="form-control" id="txt_cari_kode_brg_1" name="txt_cari_kode_brg_1" placeholder="Cari Kode/Nama Barang" onfocus="cari_barang('1')"><br />
+                                                <label id="lbl_kode_brg_1">Kode : ... </label><br />
+                                                <label id="lbl_nama_brg_1">Nama Barang : ...</label><br />
+
+                                                <input type="hidden" id="hidden_kode_brg_1" name="hidden_kode_brg_1">
+                                                <input type="hidden" id="hidden_nama_brg_1" name="hidden_nama_brg_1">
                                             </td>
-                                            <form id="form_rinci_1" name="form_rinci_1" method="POST" action="javascript:;">
-                                                <td width="30%">
-                                                    <input type="text" class="form-control" id="txt_cari_kode_brg_1" name="txt_cari_kode_brg_1" placeholder="Cari Kode/Nama Barang" onfocus="cari_barang('1')"><br />
-                                                    <label id="lbl_kode_brg_1">Kode : ... </label><br />
-                                                    <label id="lbl_nama_brg_1">Nama Barang : ...</label><br />
+                                            <td width="15%">
+                                                <input type="text" class="form-control currencyduadigit" id="txt_qty_1" name="txt_qty_1" placeholder="Qty" size="26" required /><br />
+                                                <label id="lbl_stok_1">Stok : ...</label><br />
+                                                <label id="lbl_satuan_brg_1">Satuan : ...</label><br />
 
-                                                    <input type="hidden" id="hidden_kode_brg_1" name="hidden_kode_brg_1">
-                                                    <input type="hidden" id="hidden_nama_brg_1" name="hidden_nama_brg_1">
-                                                </td>
-                                                <td width="15%">
-                                                    <input type="text" class="form-control currencyduadigit" id="txt_qty_1" name="txt_qty_1" placeholder="Qty" size="26" required /><br />
-                                                    <label id="lbl_stok_1">Stok : ...</label><br />
-                                                    <label id="lbl_satuan_brg_1">Satuan : ...</label><br />
+                                                <input type="hidden" id="hidden_stok_1" name="hidden_stok_1">
+                                                <input type="hidden" id="hidden_satuan_brg_1" name="hidden_satuan_brg_1">
+                                            </td>
+                                            <td>
+                                                <textarea id="txt_keterangan_rinci_1" name="txt_keterangan_rinci_1" class="resizable_textarea form-control" size="26" placeholder="Merk/Type/Jenis, jika ada" onkeypress="saveRinciEnter(event,'1')"></textarea>
+                                                <label id="lbl_status_simpan_1"></label>
 
-                                                    <input type="hidden" id="hidden_stok_1" name="hidden_stok_1">
-                                                    <input type="hidden" id="hidden_satuan_brg_1" name="hidden_satuan_brg_1">
-                                                </td>
-                                                <td>
-                                                    <textarea id="txt_keterangan_rinci_1" name="txt_keterangan_rinci_1" class="resizable_textarea form-control" size="26" placeholder="Merk/Type/Jenis, jika ada" onkeypress="saveRinciEnter(event,'1')"></textarea>
-                                                    <label id="lbl_status_simpan_1"></label>
-
-                                                    <input type="hidden" id="hidden_id_ppo_item_1" name="hidden_id_ppo_item_1">
-                                                </td>
-                                                <td width="5%">
-                                                    <button class="btn btn-xs btn-success fa fa-save" id="btn_simpan_1" name="btn_simpan_1" type="button" data-toggle="tooltip" data-placement="right" title="Simpan" onclick="saveRinciClick('1')"></button>
-                                                    <button style="display:none;" class="btn btn-xs btn-warning fa fa-edit" id="btn_ubah_1" name="btn_ubah_1" type="button" data-toggle="tooltip" data-placement="right" title="Ubah" onclick="ubahRinci('1')"></button>
-                                                    <button style="display:none;" class="btn btn-xs btn-info fa fa-check" id="btn_update_1" name="btn_update_1" type="button" data-toggle="tooltip" data-placement="right" title="Update" onclick="updateRinci('1')"></button>
-                                                    <button style="display:none;" class="btn btn-xs btn-primary fa fa-close" id="btn_cancel_update_1" name="btn_cancel_update_1" type="button" data-toggle="tooltip" data-placement="right" title="Cancel Update" onclick="cancelUpdate('1')"></button>
-                                                    <button style="display:none;" class="btn btn-xs btn-danger fa fa-trash" id="btn_hapus_1" name="btn_hapus_1" type="button" data-toggle="tooltip" data-placement="right" title="Hapus" onclick="hapusRinci('1')"></button>
-                                                </td>
-                                            </form>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                                <input type="hidden" id="hidden_id_ppo_item_1" name="hidden_id_ppo_item_1">
+                                            </td>
+                                            <td width="5%">
+                                                <button class="btn btn-xs btn-success fa fa-save" id="btn_simpan_1" name="btn_simpan_1" type="button" data-toggle="tooltip" data-placement="right" title="Simpan" onclick="saveRinciClick('1')"></button>
+                                                <button style="display:none;" class="btn btn-xs btn-warning fa fa-edit" id="btn_ubah_1" name="btn_ubah_1" type="button" data-toggle="tooltip" data-placement="right" title="Ubah" onclick="ubahRinci('1')"></button>
+                                                <button style="display:none;" class="btn btn-xs btn-info fa fa-check" id="btn_update_1" name="btn_update_1" type="button" data-toggle="tooltip" data-placement="right" title="Update" onclick="updateRinci('1')"></button>
+                                                <button style="display:none;" class="btn btn-xs btn-primary fa fa-close" id="btn_cancel_update_1" name="btn_cancel_update_1" type="button" data-toggle="tooltip" data-placement="right" title="Cancel Update" onclick="cancelUpdate('1')"></button>
+                                                <button style="display:none;" class="btn btn-xs btn-danger fa fa-trash" id="btn_hapus_1" name="btn_hapus_1" type="button" data-toggle="tooltip" data-placement="right" title="Hapus" onclick="hapusRinci('1')"></button>
+                                            </td>
+                                        </form>
+                                    </tr>
+                                </tbody>
+                            </table>
                             <!-- </div> -->
                         </div>
                     </div>
+                </div>
+
+                <!-- TEST 1 (MENCAPAI FOOTER) -->
+                <div style="height: 480px;">
+
                 </div>
 
             </div>
@@ -211,25 +215,25 @@
         </div>
     </div>
     <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false" id="modalPilihEstate">
-		<div class="modal-dialog modal-sm">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="modal-title" id="myModalLabel">Devisi</h4>
-				</div>
-				<div class="modal-body">
-					<div class="form-group">
-						<label class="control-label">Pilih Devisi</label>
-					</div>
-					<div class="form-group">
-						<select class="form-control" id="cmb_pilih_est"></select>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-success" id="btn_pilih_po" onclick="pilihEST()" >Pilih</button>
-				</div>
-			</div>
-		</div>
-	</div>
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Devisi</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="control-label">Pilih Devisi</label>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" id="cmb_pilih_est"></select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="btn_pilih_po" onclick="pilihEST()">Pilih</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="modalKonfirmasiHapus">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -266,7 +270,8 @@
 <script src="<?php echo base_url(); ?>assets/jquerynumber/jquery.number.js"></script>
 <script>
     $(document).ready(function() {
-        $('body').removeClass('nav-md').addClass('nav-sm');
+        //SIDEBAR ditampilkan saat masuk ke file ini.
+        //$('body').removeClass('nav-md').addClass('nav-sm');
         $('#a_spp_baru').hide();
 
         // pilih estate
@@ -297,7 +302,7 @@
             }
         });
 
-        function pilihDevisi(){
+        function pilihDevisi() {
             $.ajax({
                 type: "POST",
                 url: "<?php echo site_url('spp/cari_devisi'); ?>",
@@ -328,13 +333,13 @@
 
     });
 
-    function pilihEST(){
-  		$('#modalPilihEstate').modal('hide');
-  		var est = $('#cmb_pilih_est option:selected').text();
+    function pilihEST() {
+        $('#modalPilihEstate').modal('hide');
+        var est = $('#cmb_pilih_est option:selected').text();
         $('#_est').remove();
-        $('#txt_estate').append('<div style="text-align: right;" class="form-group nav navbar-right col-md-4" id="_est"><div class="form-group"><label class="control-label col-md-12 col-sm-6 col-xs-12" >'+est+'</label></div></div>');
+        $('#txt_estate').append('<div style="text-align: right;" class="form-group nav navbar-right col-md-4" id="_est"><div class="form-group"><label class="control-label col-md-12 col-sm-6 col-xs-12" >' + est + '</label></div></div>');
         $('#txt_input_estate').val(est);
-  	}
+    }
 
     function tabKeterangan(e) {
         if (e.keyCode == 9) {
@@ -346,11 +351,11 @@
         $('#txt_kode_departemen').val(kodeDept);
     }
 
-    $('#cmb_alokasi').change(function(){
-        var ses_lokasi ='<?= $this->session->userdata('status_lokasi')?>';
-        if(this.value == 'SITE'){
+    $('#cmb_alokasi').change(function() {
+        var ses_lokasi = '<?= $this->session->userdata('status_lokasi') ?>';
+        if (this.value == 'SITE') {
             $('#modalPilihEstate').modal('show');
-        }else{
+        } else {
             $('#_est').remove();
             $('#txt_estate').append('');
             $('#txt_input_estate').val('');
@@ -358,7 +363,7 @@
     });
 
     $('#cmb_jenis_permohonan').change(function() {
-        
+
         var ses_lokasi = '<?php echo $this->session->userdata('status_lokasi'); ?>';
         // if(ses_lokasi == 'SITE'){
         //     $('#modalPilihEstate').modal('show');
@@ -824,9 +829,9 @@
     }
 
     function simpanAll() {
-        var jumlah=document.getElementById("tableRinciBarang").rows.length;
-        console.log(jumlah-1);
-        for(var i = 1; i<=jumlah-1;i++){
+        var jumlah = document.getElementById("tableRinciBarang").rows.length;
+        console.log(jumlah - 1);
+        for (var i = 1; i <= jumlah - 1; i++) {
             var tes = document.getElementById("tableRinciBarang").rows[i].cells[i].innerHTML;
             console.log(tes);
         }

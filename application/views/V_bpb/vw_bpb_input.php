@@ -155,7 +155,7 @@ $lokasi_sesi = $this->session->userdata('status_lokasi');
 										</td>
 										<td>
 											<!- AFD/UNIT-> <select class="form-control set_strip_cmb" id="cmb_afd_unit_1" name="cmb_afd_unit_1" onchange="cmb_blok_sub(1)">
-												<option value="-">-</option>
+													<option value="-">-</option>
 												</select>
 										</td>
 										<td>
@@ -227,6 +227,11 @@ $lokasi_sesi = $this->session->userdata('status_lokasi');
 							</tbody>
 						</table>
 					</div>
+				</div>
+
+				<!-- TEST 1 (MENCAPAI FOOTER) -->
+				<div style="height: 450px;">
+
 				</div>
 
 			</div>
@@ -349,7 +354,7 @@ $lokasi_sesi = $this->session->userdata('status_lokasi');
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-success" id="btn_pilih_po" onclick="pilihEST()" >Pilih</button>
+					<button type="button" class="btn btn-success" id="btn_pilih_po" onclick="pilihEST()">Pilih</button>
 				</div>
 			</div>
 		</div>
@@ -365,7 +370,7 @@ $lokasi_sesi = $this->session->userdata('status_lokasi');
 <script>
 	$(document).ready(function() {
 		$('#modalPilihEstate').modal('show');
-        pilihDevisi();
+		pilihDevisi();
 		$('#a_bpb_baru').hide();
 		$('#hidden_no_table').val(2);
 		$.ajax({
@@ -396,7 +401,7 @@ $lokasi_sesi = $this->session->userdata('status_lokasi');
 		}, 1000);
 	});
 
-	function pilihDevisi(){
+	function pilihDevisi() {
 		$.ajax({
 			type: "POST",
 			url: "<?php echo site_url('spp/cari_devisi'); ?>",
@@ -415,34 +420,34 @@ $lokasi_sesi = $this->session->userdata('status_lokasi');
 			}
 		});
 	}
-	
-	function pilihEST(){
-  		$('#modalPilihEstate').modal('hide');
-  		var est = $('#cmb_pilih_est').val();
-        // $('#_est').remove();
-        // $('#txt_estate').append('<label class="control-label col-md-12 col-sm-6 col-xs-12" id="_est">Kebun '+est+'</label>');
-        // $('#txt_input_estate').val(est);
-  	}
 
-	$('#cmb_alokasi_est').change(function(){
-        // var ses_lokasi ='<?= $this->session->userdata('status_lokasi')?>';
-        if(this.value == '06'){
-            $('#_est').remove();
-            $('#txt_estate').append('<label id="_est" class="control-label">Kebun 1</label>');
-        }else if(this.value == '07'){
-            $('#_est').remove();
-            $('#txt_estate').append('<label id="_est" class="control-label">Kebun 2</label>');
-        }else if(this.value == '08'){
-            $('#_est').remove();
-            $('#txt_estate').append('<label id="_est" class="control-label">Kebun 3</label>');
-        }else if(this.value == '09'){
-            $('#_est').remove();
-            $('#txt_estate').append('<label id="_est" class="control-label">Kebun 4</label>');
-        }else{
-            $('#_est').remove();
-            $('#txt_estate').append('');
+	function pilihEST() {
+		$('#modalPilihEstate').modal('hide');
+		var est = $('#cmb_pilih_est').val();
+		// $('#_est').remove();
+		// $('#txt_estate').append('<label class="control-label col-md-12 col-sm-6 col-xs-12" id="_est">Kebun '+est+'</label>');
+		// $('#txt_input_estate').val(est);
+	}
+
+	$('#cmb_alokasi_est').change(function() {
+		// var ses_lokasi ='<?= $this->session->userdata('status_lokasi') ?>';
+		if (this.value == '06') {
+			$('#_est').remove();
+			$('#txt_estate').append('<label id="_est" class="control-label">Kebun 1</label>');
+		} else if (this.value == '07') {
+			$('#_est').remove();
+			$('#txt_estate').append('<label id="_est" class="control-label">Kebun 2</label>');
+		} else if (this.value == '08') {
+			$('#_est').remove();
+			$('#txt_estate').append('<label id="_est" class="control-label">Kebun 3</label>');
+		} else if (this.value == '09') {
+			$('#_est').remove();
+			$('#txt_estate').append('<label id="_est" class="control-label">Kebun 4</label>');
+		} else {
+			$('#_est').remove();
+			$('#txt_estate').append('');
 		}
-    });
+	});
 
 	function cek_tm_tbm(row) {
 		if ($('#cmb_bagian :selected').text() != "TANAMAN") {
@@ -962,7 +967,7 @@ $lokasi_sesi = $this->session->userdata('status_lokasi');
 		var td_col_1 = '<td>' +
 			'<input type="hidden" id="hidden_proses_status_' + row + '" name="hidden_proses_status_' + row + '" value="insert">' +
 			'<button class="btn btn-xs btn-info fa fa-plus" data-toggle="tooltip" data-placement="left" title="Tambah" id="btn_tambah_row" name="btn_tambah_row" onclick="tambah_row(' + row + ')"></button><br />' +
-			'<button class="btn btn-xs btn-danger fa fa-minus btn_hapus_row" type="button" data-toggle="tooltip" data-placement="left" title="Hapus" id="btn_hapus_row_'+row+'" name="btn_hapus_row" onclick="hapus_row(' + row + ')"></button>' +
+			'<button class="btn btn-xs btn-danger fa fa-minus btn_hapus_row" type="button" data-toggle="tooltip" data-placement="left" title="Hapus" id="btn_hapus_row_' + row + '" name="btn_hapus_row" onclick="hapus_row(' + row + ')"></button>' +
 			'</td>';
 		var form_buka = '<form id="form_rinci_' + row + '" name="form_rinci_' + row + '" method="POST" action="javascript:;">';
 		var td_col_2 = '<td>' +
@@ -1414,7 +1419,7 @@ $lokasi_sesi = $this->session->userdata('status_lokasi');
 
 						$('#h4_no_bpb').html('No. BPB : ' + data.nobpb);
 						$('#h4_no_ref_bpb').html('No. Ref BPB : ' + data.norefbpb);
-						$('#btn_hapus_row_'+no).css('display','none');
+						$('#btn_hapus_row_' + no).css('display', 'none');
 
 						$('#hidden_no_bpb').val(data.nobpb);
 						$('#hidden_no_ref_bpb').val(data.norefbpb);

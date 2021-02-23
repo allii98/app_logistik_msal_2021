@@ -102,6 +102,8 @@ $lokasi_sesi = $this->session->userdata('status_lokasi');
 							</div>
 						</div>
 					</div>
+
+
 				</div>
 				<div class="x_content div_form_2">
 					<label id="lbl_bkb_status" name="lbl_bkb_status">No. BKB : ... &nbsp; No. Ref. BKB : ...</label>
@@ -134,6 +136,12 @@ $lokasi_sesi = $this->session->userdata('status_lokasi');
 							</tbody>
 						</table>
 					</div>
+				</div>
+
+
+				<!-- TEST 1 (MENCAPAI FOOTER) -->
+				<div style="height: 440px;">
+
 				</div>
 
 			</div>
