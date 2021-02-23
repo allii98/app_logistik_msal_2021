@@ -215,8 +215,8 @@ if ($this->session->userdata('status_lokasi') == "HO" || $this->session->userdat
 							case "Purchasing":
 						?>
 								<div id="btnfo"><button type="button" class="btn btn-default">No data available to select</button></div>
-								<button type="button" class="btn btn-success btncon1">Approve</button>
-								<button type="button" class="btn btn-danger btncon2">Not Approve</button>
+								<button type="button" id="approve" class="btn btn-success btncon1">Approve</button>
+								<button type="button" id="not" class="btn btn-danger btncon2">Not Approve</button>
 						<?php
 								break;
 							default:
@@ -843,6 +843,13 @@ if ($this->session->userdata('status_lokasi') == "HO" || $this->session->userdat
 		$('#modalApprovalSPP').modal('show');
 		tableApprovalSPP(noppotxt, noref);
 	}
+
+	$(document).ready(function() {
+    $(document).on('click', '#approve', function() {
+        
+        $("#modalApprovalSPP").modal('hide');
+    });
+});
 
 	function tableApprovalSPP(noppotxt, noref) {
 		$('#tableApprovalSPP').DataTable().destroy();
