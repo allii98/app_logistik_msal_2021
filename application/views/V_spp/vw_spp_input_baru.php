@@ -88,7 +88,7 @@
                                     <input id="txt_tgl_ref" name="txt_tgl_ref" class="form-control col-md-7 col-xs-12" required="required" type="text" data-date-format="yyyy-mm-dd" value="<?= date('m/d/Y'); ?>" readonly>
                                 </div>
                                 <div class="col-md-2 col-sm-6 col-xs-12">
-                                    <input id="txt_tgl_terima" name="txt_tgl_terima" class="form-control col-md-7 col-xs-12" required="required" type="text" data-date-format="yyyy-mm-dd" placeholder="Tgl. Terima" readonly>
+                                    <input id="txt_tgl_terima" name="txt_tgl_terima" class="form-control col-md-7 col-xs-12" required="required" type="text" data-date-format="yyyy-mm-dd" placeholder="Tgl. Terima">
                                 </div>
                                 <input id="txt_tanggal" name="txt_tanggal" class="form-control col-md-7 col-xs-12" required="required" type="hidden" data-date-format="yyyy-mm-dd" placeholder="Tanggal" readonly>
 
