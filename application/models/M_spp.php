@@ -546,7 +546,7 @@ class M_spp extends CI_Model
             $row[] = $hasil->status;
             $row[] = $hasil->user;
             $row[] = '<a href="javascript:;" id="a_approval_ktu">
-                    <button class="btn btn-primary btn-xs fa fa-square" id="btn_approval" name="btn_approval" data-toggle="tooltip" data-placement="top" title="Approval" onClick="modalApproval1(' . $noppo1 . ',' . $noref1 . ',' . $jenis1 . ',' . $dept1 . ',' . $dept2 . ',' . $lokasi1 . ');">
+                    <button class="btn btn-primary btn-xs fa fa-eye" id="btn_approval" name="btn_approval" data-toggle="tooltip" data-placement="top" title="Approval" onClick="modalApproval1(' . $noppo1 . ',' . $noref1 . ',' . $jenis1 . ',' . $dept1 . ',' . $dept2 . ',' . $lokasi1 . ');">
                     </button>
                     </a>';
             $query_item_ppo = "SELECT kodebartxt, nabar, sat, qty, ket FROM item_ppo WHERE noppotxt = '$hasil->noppotxt'";
@@ -1052,7 +1052,7 @@ class M_spp extends CI_Model
             $row[] = $hasil->user;
 
             $row[] = '<a href="javascript:;" id="a_approval_ktu">
-                    <button class="btn btn-primary btn-xs fa fa-square" id="btn_approval_ktu" name="btn_approval_ktu" data-toggle="tooltip" data-placement="top" title="Approval" onClick="modalApproval(' . $hasil->noppotxt . ')">
+                    <button class="btn btn-primary btn-xs fa fa-eye" id="btn_approval_ktu" name="btn_approval_ktu" data-toggle="tooltip" data-placement="top" title="Approval" onClick="modalApproval(' . $hasil->noppotxt . ')">
                     </button>
                     </a>';
             // $row[] = '<a href="javascript:;" id="a_approval_gm">
