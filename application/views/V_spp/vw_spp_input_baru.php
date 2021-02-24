@@ -174,7 +174,7 @@
                 </div>
 
                 <!-- TEST 1 (MENCAPAI FOOTER) -->
-                <div style="height: 480px;">
+                <div style="height: 490px;">
 
                 </div>
 
@@ -255,6 +255,8 @@
     </div>
 
 </div>
+
+
 <input type="hidden" id="hidden_no_table" name="hidden_no_table">
 
 <script src="<?php echo base_url(); ?>assets/gentelella/vendors/jquery/dist/jquery.min.js"></script>
