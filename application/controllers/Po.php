@@ -61,7 +61,7 @@ class Po extends CI_Controller {
 
 		// 0=DALAM PROSES, 1=DISETUJUI, 2=SEBAGIAN, 3=TIDAK DISETUJUI, 4=DIKETAHUI, 5=BATAL, 6=UBAH, 7=REQUEST UBAH, 8=TIDAK DISETUJUI SEBAGIAN
 
-		$query_ppo = "SELECT id, noppo, noppotxt, tglppo, noref, noreftxt, tglref, tglppo, tgltrm, kodedept, namadept, ket, pt, kodept, lokasi, status, status2, po, jenis FROM ppo WHERE status2 IN ('1','2','8') AND noppotxt = '$no_spp' AND noreftxt = '$no_ref_spp' AND po = '0' ORDER BY id DESC, tglisi DESC";
+		$query_ppo = "SELECT id, noppo, noppotxt, tglppo, noref, noreftxt, tglref, tglppo, tgltrm, kodedept, namadept, ket, pt, kodept, lokasi, status, status2, po, jenis FROM ppo WHERE status2 IN ('1','2','8') AND noppotxt = '$no_spp' AND noreftxt = '$no_ref_spp' ORDER BY id DESC, tglisi DESC";
 		// var_dump($query_ppo);exit();
 
 		$query_item = "SELECT id, noppo, noppotxt, tglppo, noref, noreftxt, kodebartxt, nabar, tglppo, qty, kodedept, namadept, ket, kodept, namapt, lokasi, status, status2, po, sat FROM item_ppo WHERE status2 IN ('1','2') AND noppotxt = '$no_spp' AND noreftxt = '$no_ref_spp' AND kodebartxt = '$kodebar' ORDER BY id DESC, tglisi DESC";

@@ -118,6 +118,7 @@ class Auth extends CI_Controller
 						'id_user' => $user->no,
 						'user' => $user->nama,
 						'status_lokasi' => $user->status_lokasi, //HO, RO, SITE, PKS
+						'id_dept' => $user->id_dept,
 						// 'app_pt' => 'MSAL', //MSAL, MAPA, PSAM, PEAK
 						'app_pt' => $pt_alias,
 						'kode_pt' => $kode_pt,

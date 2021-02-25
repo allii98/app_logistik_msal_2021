@@ -162,7 +162,135 @@ class M_spp extends CI_Model
         return $count_all = $this->db_logistik_pt->query($query)->num_rows();
     }
 
+    public function get_spp($teks = null)
+    {
+        $data = array();
+        $start = $_POST['start'];
+        $length = $_POST['length'];
+        $no = $start + 1;
 
+        $kode_level_sesi = $this->session->userdata('kode_level');
+        $lokasi = $this->session->userdata('status_lokasi');
+        if ($lokasi == 'HO')
+            $query_lokasi = "";
+        else {
+            $query_lokasi = "AND lokasi ='" . $lokasi . "'";
+        }
+        $user_sesi = $this->session->userdata('id_dept');
+        $periode = $this->session->userdata('ym_periode');
+        $periode = "AND periodetxt = '" . $periode . "'";
+        $null = "status2 IN ('0','2','6','7','8')";
+        if ($teks != null) {
+            $null = "status2 IN ('0')";
+        }
+        $filter = $this->input->post('filter');
+        switch ($filter) {
+            case "Sudah PO":
+                $keyfilter1 = "AND po = '1'";
+                break;
+            case "Belum PO":
+                $keyfilter1 = "AND po = '0'";
+                break;
+            case "SPPI":
+                $keyfilter1 = "AND jenis = 'SPPI'";
+                break;
+            case "SPPA":
+                $keyfilter1 = "AND jenis = 'SPPA'";
+                break;
+            case "06":
+                $keyfilter1 = "AND noreftxt LIKE '%EST-%'";
+                break;
+            case "07":
+                $keyfilter1 = "AND noreftxt LIKE '%EST2%'";
+                break;
+            default:
+                $keyfilter1 = "";
+                break;
+        }
+
+        if (!empty($_POST['search']['value'])) {
+            $keyword = $_POST['search']['value'];
+            $query = "SELECT id, noppo, noppotxt, noref, noreftxt, tglref, tglppo, tgltrm, namadept, ket, pt, kodept, lokasi, status, status2, user FROM ppo
+                        WHERE ($null $query_lokasi $periode $keyfilter1) AND
+                        (noppotxt LIKE '%$keyword%'
+                        OR noreftxt LIKE '%$keyword%'
+                        OR tglref LIKE '%$keyword%'
+                        OR tglppo LIKE '%$keyword%'
+                        OR tgltrm LIKE '%$keyword%'
+                        OR namadept LIKE '%$keyword%'
+                        OR ket LIKE '%$keyword%'
+                        OR lokasi LIKE '%$keyword%'
+                        OR status LIKE '%$keyword%')
+                        ORDER BY tglisi DESC";
+            $count_all = $this->db_logistik_pt->query($query)->num_rows();
+            $data_tabel = $this->db_logistik_pt->query($query . " LIMIT $start,$length")->result();
+        } else {
+            // $query = "SELECT p.id, p.noppo, p.noppotxt, p.noref, p.noreftxt, p.tglref, p.tglppo, p.tgltrm, p.namadept, p.ket, p.pt, p.kodept, p.lokasi, p.status, p.status2, p.user, p.kodedept , u.id_dept FROM ppo p LEFT JOIN usr u ON p.kodedept = u.id_dept WHERE p.kodedept = $user_sesi";
+            $query = "SELECT id, noppo, noppotxt, noref, noreftxt, tglref, tglppo, tgltrm, namadept, ket, pt, kodept, lokasi, status, status2, user FROM ppo WHERE $null $query_lokasi $periode $keyfilter1 ORDER BY tglisi DESC";
+            // var_dump($query);exit();
+            $count_all = $this->db_logistik_pt->query($query)->num_rows();
+            $data_tabel = $this->db_logistik_pt->query($query . " LIMIT $start,$length")->result();
+        }
+        foreach ($data_tabel as $hasil) {
+            $row   = array();
+            $id = $hasil->id;
+            $noref1 = "'" . $hasil->noreftxt . "'";
+            $noppo1 = "'" . $hasil->noppotxt . "'";
+            $dept1 = "'" . $hasil->namadept . "'";
+            $lokasi1 = "'" . $hasil->lokasi . "'";
+            $jenis1 = "'" . substr($hasil->noreftxt, 4, 5) . "'";
+            $dept2 = "'" . $hasil->user . "'";
+            $query_dept_user_input = "SELECT dept FROM usr WHERE nama=$dept2";
+            $get_dept_user_input = $this->db_logistik_pt->query($query_dept_user_input)->row();
+            // $dept2 = "'".$get_dept_user_input->dept."'";
+
+            $row[] = $hasil->status2 == 0 && $hasil->user == $this->session->userdata('user') ? '<a href="' . site_url('spp/edit_spp/' . $hasil->noppotxt . '/' . $id) . '" target="_blank" class="btn btn-info fa fa-edit btn-xs" data-toggle="tooltip" data-placement="top" title="Edit SPP" id="btn_detail_barang"> Ubah </a>
+            <a href="javascript:;" id="a_hapus_spp"><button class="btn btn-danger fa fa-trash btn-xs" id="btn_hapus_spp" name="btn_hapus_spp" data-toggle="tooltip" data-placement="top" title="Hapus SPP" onClick="konfirmasiHapusSPP(' . $id . ',' . $hasil->noppotxt . ')"> Batal</button></a>'
+                : '<a href="javascript:;" class="btn btn-warning btn-xs">No Option</a>';
+
+            $row[] = $no++;
+            $row[] = $hasil->noppotxt;
+            $row[] = $hasil->noreftxt;
+            $row[] = date("Y-m-d", strtotime($hasil->tglref));
+            $row[] = date("Y-m-d", strtotime($hasil->tglppo));
+            $row[] = date("Y-m-d", strtotime($hasil->tgltrm));
+            $row[] = $hasil->namadept;
+            $row[] = $hasil->pt;
+            $row[] = $hasil->lokasi;
+            $row[] = $hasil->ket;
+            $row[] = $hasil->status;
+            $row[] = $hasil->user;
+            $row[] = '<a href="javascript:;" id="a_approval_ktu">
+                    <button class="btn btn-primary btn-xs fa fa-eye" id="btn_approval" name="btn_approval" data-toggle="tooltip" data-placement="top" title="Approval" onClick="modalApproval1(' . $noppo1 . ',' . $noref1 . ',' . $jenis1 . ',' . $dept1 . ',' . $dept2 . ',' . $lokasi1 . ');">
+                    </button>
+                    </a>';
+            $query_item_ppo = "SELECT kodebartxt, nabar, sat, qty, ket FROM item_ppo WHERE noppotxt = '$hasil->noppotxt'";
+            $data_item_ppo = $this->db_logistik_pt->query($query_item_ppo)->result();
+            // var_dump($query_item_ppo);exit();
+            $data_detail = array();
+            $data_detail_nama = array();
+            foreach ($data_item_ppo as $item_spp) {
+                $row_detail = array();
+                $row_detail[] = $item_spp->kodebartxt;
+                $row_detail[] = $item_spp->nabar;
+                $row_detail[] = $item_spp->sat;
+                $row_detail[] = $item_spp->qty;
+                // $row_detail[] = $item_spp->merk;
+                $row_detail[] = $item_spp->ket;
+                $data_detail[] = $row_detail;
+                array_push($data_detail_nama, $item_spp->nabar);
+            }
+            $row[] = substr_replace((join(", ", $data_detail_nama)), '...', 50);
+            $data[] = array($row, $data_detail);
+        }
+        $output = array(
+            "draw"              => $_POST['draw'],
+            "recordsTotal"      => $count_all,
+            "recordsFiltered"   => $count_all,
+            "data"              => $data,
+        );
+        return $output;
+    }
 
     function get_list_spp()
     {
@@ -448,7 +576,7 @@ class M_spp extends CI_Model
         return $output;
     }
 
-    function get_list_approval_baru($teks = null)
+    function get_approval_baru($teks = null)
     {
         $data = array();
         $start = $_POST['start'];
@@ -462,7 +590,7 @@ class M_spp extends CI_Model
         else {
             $query_lokasi = "AND lokasi ='" . $lokasi . "'";
         }
-        $user_sesi = $this->session->userdata('user');
+        $user_sesi = $this->session->userdata('id_dept');
         $periode = $this->session->userdata('ym_periode');
         $periode = "AND periodetxt = '" . $periode . "'";
         $null = "status2 IN ('0','2','6','7','8')";
@@ -511,6 +639,136 @@ class M_spp extends CI_Model
             $count_all = $this->db_logistik_pt->query($query)->num_rows();
             $data_tabel = $this->db_logistik_pt->query($query . " LIMIT $start,$length")->result();
         } else {
+            $query = "SELECT id, noppo, noppotxt, noref, noreftxt, tglref, tglppo, tgltrm, namadept, ket, pt, kodept, lokasi, status, status2, user FROM ppo WHERE status2 IN ('0') ORDER BY tglisi DESC";
+            // $query = "SELECT id, noppo, noppotxt, noref, noreftxt, tglref, tglppo, tgltrm, namadept, ket, pt, kodept, lokasi, status, status2, user FROM ppo WHERE $null $query_lokasi $periode $keyfilter1 ORDER BY tglisi DESC";
+            // var_dump($query);exit();
+            $count_all = $this->db_logistik_pt->query($query)->num_rows();
+            $data_tabel = $this->db_logistik_pt->query($query . " LIMIT $start,$length")->result();
+        }
+        foreach ($data_tabel as $hasil) {
+            $row   = array();
+            $id = $hasil->id;
+            $noref1 = "'" . $hasil->noreftxt . "'";
+            $noppo1 = "'" . $hasil->noppotxt . "'";
+            $dept1 = "'" . $hasil->namadept . "'";
+            $lokasi1 = "'" . $hasil->lokasi . "'";
+            $jenis1 = "'" . substr($hasil->noreftxt, 4, 5) . "'";
+            $dept2 = "'" . $hasil->user . "'";
+            $query_dept_user_input = "SELECT dept FROM usr WHERE nama=$dept2";
+            $get_dept_user_input = $this->db_logistik_pt->query($query_dept_user_input)->row();
+            // $dept2 = "'".$get_dept_user_input->dept."'";
+
+            $row[] = $hasil->status2 == 0 && $hasil->user == $this->session->userdata('user') ? '<a href="' . site_url('spp/edit_spp/' . $hasil->noppotxt . '/' . $id) . '" target="_blank" class="btn btn-info fa fa-edit btn-xs" data-toggle="tooltip" data-placement="top" title="Edit SPP" id="btn_detail_barang"> Ubah </a>
+            <a href="javascript:;" id="a_hapus_spp"><button class="btn btn-danger fa fa-trash btn-xs" id="btn_hapus_spp" name="btn_hapus_spp" data-toggle="tooltip" data-placement="top" title="Hapus SPP" onClick="konfirmasiHapusSPP(' . $id . ',' . $hasil->noppotxt . ')"> Batal</button></a>'
+                : '<a href="javascript:;" class="btn btn-warning btn-xs">No Option</a>';
+
+            $row[] = $no++;
+            $row[] = $hasil->noppotxt;
+            $row[] = $hasil->noreftxt;
+            $row[] = date("Y-m-d", strtotime($hasil->tglref));
+            $row[] = date("Y-m-d", strtotime($hasil->tglppo));
+            $row[] = date("Y-m-d", strtotime($hasil->tgltrm));
+            $row[] = $hasil->namadept;
+            $row[] = $hasil->pt;
+            $row[] = $hasil->lokasi;
+            $row[] = $hasil->ket;
+            $row[] = $hasil->status;
+            $row[] = $hasil->user;
+            $row[] = '<a href="javascript:;" id="a_approval_ktu">
+                    <button class="btn btn-primary btn-xs fa fa-eye" id="btn_approval" name="btn_approval" data-toggle="tooltip" data-placement="top" title="Approval" onClick="modalApproval1(' . $noppo1 . ',' . $noref1 . ',' . $jenis1 . ',' . $dept1 . ',' . $dept2 . ',' . $lokasi1 . ');">
+                    </button>
+                    </a>';
+            $query_item_ppo = "SELECT kodebartxt, nabar, sat, qty, ket FROM item_ppo WHERE noppotxt = '$hasil->noppotxt'";
+            $data_item_ppo = $this->db_logistik_pt->query($query_item_ppo)->result();
+            // var_dump($query_item_ppo);exit();
+            $data_detail = array();
+            $data_detail_nama = array();
+            foreach ($data_item_ppo as $item_spp) {
+                $row_detail = array();
+                $row_detail[] = $item_spp->kodebartxt;
+                $row_detail[] = $item_spp->nabar;
+                $row_detail[] = $item_spp->sat;
+                $row_detail[] = $item_spp->qty;
+                // $row_detail[] = $item_spp->merk;
+                $row_detail[] = $item_spp->ket;
+                $data_detail[] = $row_detail;
+                array_push($data_detail_nama, $item_spp->nabar);
+            }
+            $row[] = substr_replace((join(", ", $data_detail_nama)), '...', 50);
+            $data[] = array($row, $data_detail);
+        }
+        $output = array(
+            "draw"              => $_POST['draw'],
+            "recordsTotal"      => $count_all,
+            "recordsFiltered"   => $count_all,
+            "data"              => $data,
+        );
+        return $output;
+    }
+    function get_list_approval_baru($teks = null)
+    {
+        $data = array();
+        $start = $_POST['start'];
+        $length = $_POST['length'];
+        $no = $start + 1;
+
+        $kode_level_sesi = $this->session->userdata('kode_level');
+        $lokasi = $this->session->userdata('status_lokasi');
+        if ($lokasi == 'HO')
+            $query_lokasi = "";
+        else {
+            $query_lokasi = "AND lokasi ='" . $lokasi . "'";
+        }
+        $user_sesi = $this->session->userdata('id_dept');
+        $periode = $this->session->userdata('ym_periode');
+        $periode = "AND periodetxt = '" . $periode . "'";
+        $null = "status2 IN ('0','2','6','7','8')";
+        if ($teks != null) {
+            $null = "status2 IN ('0')";
+        }
+        $filter = $this->input->post('filter');
+        switch ($filter) {
+            case "Sudah PO":
+                $keyfilter1 = "AND po = '1'";
+                break;
+            case "Belum PO":
+                $keyfilter1 = "AND po = '0'";
+                break;
+            case "SPPI":
+                $keyfilter1 = "AND jenis = 'SPPI'";
+                break;
+            case "SPPA":
+                $keyfilter1 = "AND jenis = 'SPPA'";
+                break;
+            case "06":
+                $keyfilter1 = "AND noreftxt LIKE '%EST-%'";
+                break;
+            case "07":
+                $keyfilter1 = "AND noreftxt LIKE '%EST2%'";
+                break;
+            default:
+                $keyfilter1 = "";
+                break;
+        }
+
+        if (!empty($_POST['search']['value'])) {
+            $keyword = $_POST['search']['value'];
+            $query = "SELECT id, noppo, noppotxt, noref, noreftxt, tglref, tglppo, tgltrm, namadept, ket, pt, kodept, lokasi, status, status2, user FROM ppo
+                        WHERE ($null $query_lokasi $periode $keyfilter1) AND
+                        (noppotxt LIKE '%$keyword%'
+                        OR noreftxt LIKE '%$keyword%'
+                        OR tglref LIKE '%$keyword%'
+                        OR tglppo LIKE '%$keyword%'
+                        OR tgltrm LIKE '%$keyword%'
+                        OR namadept LIKE '%$keyword%'
+                        OR ket LIKE '%$keyword%'
+                        OR lokasi LIKE '%$keyword%'
+                        OR status LIKE '%$keyword%')
+                        ORDER BY tglisi DESC";
+            $count_all = $this->db_logistik_pt->query($query)->num_rows();
+            $data_tabel = $this->db_logistik_pt->query($query . " LIMIT $start,$length")->result();
+        } else {
+            // $query = "SELECT p.id, p.noppo, p.noppotxt, p.noref, p.noreftxt, p.tglref, p.tglppo, p.tgltrm, p.namadept, p.ket, p.pt, p.kodept, p.lokasi, p.status, p.status2, p.user, p.kodedept , u.id_dept FROM ppo p LEFT JOIN usr u ON p.kodedept = u.id_dept WHERE p.kodedept = $user_sesi";
             $query = "SELECT id, noppo, noppotxt, noref, noreftxt, tglref, tglppo, tgltrm, namadept, ket, pt, kodept, lokasi, status, status2, user FROM ppo WHERE $null $query_lokasi $periode $keyfilter1 ORDER BY tglisi DESC";
             // var_dump($query);exit();
             $count_all = $this->db_logistik_pt->query($query)->num_rows();

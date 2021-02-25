@@ -34,7 +34,7 @@
 						<thead>
 							<tr>
 
-								<th>#</th>
+								<!-- <th>#</th>
 								<th>No.</th>
 								<th>No. SPP</th>
 								<th>No. Ref</th>
@@ -45,10 +45,24 @@
 								<th>Item Barang</th>
 								<th>Keterangan</th>
 								<th>Status</th>
+								<th>Input Oleh</th> -->
+								<th>#</th>
+								<th>Approval</th>
+								<th>No.</th>
+								<th>No. SPP</th>
+								<th>No. Ref</th>
+								<th>Tgl. Ref</th>
+								<th>Tanggal</th>
+								<th>Tgl. Terima</th>
+								<th>Departemen</th>
+								<th>Lokasi</th>
+								<th>Keterangan</th>
+								<th>Item Barang</th>
+								<th>Status</th>
 								<th>Input Oleh</th>
 							</tr>
 						</thead>
-						<tbody id="tbody_list_spp">
+						<tbody id="tableListSPP">
 						</tbody>
 					</table>
 					<br />

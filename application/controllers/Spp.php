@@ -44,14 +44,65 @@ class Spp extends CI_Controller
 		$this->load->model('M_spp');
 	}
 
+	function get_ajax()
+    {
+        $list = $this->M_spp->get_datatables();
+		print_r($list);
+        // $data = array();
+        // $no = $_POST['start'];
+        // foreach ($list as $d) {
+        //     $no++;
+        //     $row = array();
+        //     $row[] = $no . ".";
+        //     $row[] = $d->id_tiket;
+        //     $row[] = date_format(date_create($d->tanggal_tiket), 'd-m-Y  H:i:s');
+        //     $row[] = $d->nama;
+        //     $row[] = $d->kondisi;
+        //     // $row[] = '<img src=" ' . site_url('assets/uploads/tiket/' . $d->foto) . '" width="60px">';
+        //     $row[] = $d->foto == 0 ? 'Tidak ada foto' : '<img src=" ' . site_url('assets/uploads/tiket/' . $d->foto) . '" width="60px">';
+        //     $row[] = $d->prioritas == 1 ?  '' : ($d->prioritas == 2 ? '<span class="badge badge-info">Normal</span>' : ($d->prioritas == 3  ? '<span class="badge badge-primary">Utama</span>' : ($d->prioritas == 4  ? '<span class="badge badge-success">Luar biasa</span>' : false)));
+        //     $row[] =  $d->solusi == 1 ? '<span class="badge badge-warning">Waiting</span>' : ($d->solusi == 2 ? '<span class="badge badge-primary">Progress</span>' : ($d->solusi == 3  ? '<span class="badge badge-success">Selesai</span>' : ($d->solusi == 4  ? '<span class="badge badge-danger">Butuh bantuan</span>' : false)));
+
+
+
+
+        //     // add html for action
+
+        //     $data[] = $row;
+        // }
+        // $output = array(
+        //     "draw" => $_POST['draw'],
+        //     "recordsTotal" => $this->Home_m->count_all(),
+        //     "recordsFiltered" => $this->Home_m->count_filtered(),
+        //     "data" => $data,
+        // );
+        // output to json format
+        // echo json_encode($output);
+    }
+
 	public function index()
 	{
-		$this->template->utama('V_spp/vw_spp_index_baru');
+		// $this->template->utama('V_spp/vw_spp_new');
+		$url = $this->uri->segment(3);
+		if ($url == 1) {
+			$data['url'] = $url;
+			$this->template->utama('V_spp/vw_spp_new', $data);
+		} else {
+			$data['url'] = 0;
+			$this->template->utama('V_spp/vw_spp_new', $data);
+		}
 	}
 
 	function list_spp()
 	{
-		$data = $this->M_spp->get_list_spp();
+		// $data = $this->M_spp->get_spp();
+		// // var_dump($data); die();
+		// echo json_encode($data);
+		$url = $this->uri->segment(3);
+		if ($url == 0)
+			$data = $this->M_spp->get_approval_baru();
+		else
+			$data = $this->M_spp->get_approval_baru($url);
 		echo json_encode($data);
 	}
 
@@ -68,6 +119,15 @@ class Spp extends CI_Controller
 			$data = $this->M_spp->get_list_approval();
 		else
 			$data = $this->M_spp->get_list_approval($url);
+		echo json_encode($data);
+	}
+	function approval_baru()
+	{
+		$url = $this->uri->segment(3);
+		if ($url == 0)
+			$data = $this->M_spp->get_approval_baru();
+		else
+			$data = $this->M_spp->get_approval_baru($url);
 		echo json_encode($data);
 	}
 	function list_approval_baru()

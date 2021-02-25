@@ -33,7 +33,7 @@ $lokasi_sesi = $this->session->userdata('status_lokasi');
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="x_panel">
 				<div class="x_title">
-					<h2>PO <small>Permohonan Order</small></h2>
+					<h2>PO (Permohonan Order) </h2>
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">
@@ -979,10 +979,12 @@ $lokasi_sesi = $this->session->userdata('status_lokasi');
 		var rowcollection = $('#tableDetailSPP').DataTable().rows({
 			selected: true
 		}).data().toArray();
+		// console.log(rowcollection);
 		$.each(rowcollection, function(index, elem) {
 			var no_spp = rowcollection[index][1];
 			var no_ref_spp = rowcollection[index][3];
 			var kodebar = rowcollection[index][5];
+			console.log(no_spp, no_ref_spp, kodebar);
 			data_spp_dipilih(no_spp, no_ref_spp, kodebar);
 		})
 	}
@@ -1009,7 +1011,7 @@ $lokasi_sesi = $this->session->userdata('status_lokasi');
 				'kodebar': kodebar
 			},
 			success: function(data) {
-				// console.log(data);
+				console.log(data);
 				var tglref = new Date(data[0].tglref);
 				var tglppo = new Date(data[0].tglppo);
 
@@ -1085,7 +1087,7 @@ $lokasi_sesi = $this->session->userdata('status_lokasi');
 	// } );
 
 	function tambah_row(row) {
-		console.log(row);
+		// console.log(row);
 		var tr_buka = '<tr id="tr_' + row + '">';
 		var td_col_1 = '<td width="3%">' +
 			'<input type="hidden" id="hidden_proses_status_' + row + '" name="hidden_proses_status_' + row + '" value="insert">' +
@@ -1988,7 +1990,7 @@ $lokasi_sesi = $this->session->userdata('status_lokasi');
 				'no_ref_po': no_ref_po
 			},
 			success: function(data) {
-				console.log(data);
+				// console.log(data);
 				$('#txt_total_pembayaran').val(data.totalbayar);
 			},
 			error: function(request) {
